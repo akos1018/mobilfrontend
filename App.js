@@ -1,41 +1,46 @@
 import * as React from 'react';
-import { Button, View } from 'react-native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import Ajanlas from './Ajanlas.js';
-import SorozatMain from './SorozatMain.js';
-import Komment from './Komment.js';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator, CreateStackNavigator } from '@react-navigation/stack';
+import Sorozat2 from './Sorozat2.js'
+import Sorozatsajat from './Sorozatsajat.js'
+import Ajanlas from './Ajanlas'
+import Header from './header.js'
 
-function Ajanlas_oldal({ navigation }) {
-  return (
-    <Ajanlas/>
-  );
-}
-function Sorozat_Main({ navigation }) {
-  return (
-    <SorozatMain/>
-  );
-}
-function Komment_oldal({ navigation }) {
-  return (
-    <Komment/>
-  );
-}
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
-export default function App() {
-  
-  return (
-    <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Sorozat">
-        <Drawer.Screen name="Sorozat" component={Sorozat_Main}  options={{
-          headerStyle: {
-            backgroundColor: '#aeaeb6'}}}
-           />
-        <Drawer.Screen name="Ajánlás" component={Ajanlas_oldal} />
-        <Drawer.Screen name="Komment" component={Komment_oldal} />
-      </Drawer.Navigator>
-    </NavigationContainer>
-  );
+export default class App extends React.Component{
+  constructor(props) {
+    super(props);
+  }
+  createHomeStack = () =>
+  <Stack.Navigator screenOptions={{
+    headerStyle:{backgroundColor:"#31364b"},
+    
+    }} >
+    <Stack.Screen
+    name="Sorozatok"
+    component={Sorozat2}
+    options={{
+    headerTitle:()=><Header/>
+  }}
+    />
+    <Stack.Screen name='Sorozatsajat' component={Sorozatsajat} options={({route}) => ({title: route.params.sorozatnev })}/>
+  </Stack.Navigator>
+
+
+  render(){
+
+    return(
+      <NavigationContainer>
+        <Drawer.Navigator initialRouteName='Sorozat' >
+          <Drawer.Screen name="Sorozat" children={this.createHomeStack} options={{headerShown:false}}  />
+          <Drawer.Screen name="Ajánlás" component={Ajanlas}/>
+        </Drawer.Navigator>
+      </NavigationContainer>
+
+    );
+  }
 }
