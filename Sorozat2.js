@@ -42,7 +42,7 @@ export default class Sorozat2 extends React.Component {
       )
     }
     return(
-      <View style={{flex:1, paddingTop:20,backgroundColor:"#31364b",justifyContent:"center",alignItems:"center"}}>
+      <View style={{flex:1, paddingTop:20,backgroundColor:"#262626",justifyContent:"center",alignItems:"center"}}>
         <FlatList
           showsVerticalScrollIndicator={false}
           numColumns={2}
@@ -50,10 +50,7 @@ export default class Sorozat2 extends React.Component {
           keyExtractor={({sorozat_id}) => sorozat_id} 
           renderItem={({item}) =>
           <View>
-            <TouchableOpacity onPress={async()=>this.props.navigation.navigate('Sorozatsajat',
-            {sorozatnev:item.sorozat_cim,
-            sorozathossz:item.sorozat_hossz,
-            sorozatid:item.sorozat_id})}>
+            <TouchableOpacity onPress={async()=>this.props.navigation.navigate('Sorozatsajat',{sorozatnev:item.sorozat_cim,sorozathossz:item.sorozat_hossz,sorozatid:item.sorozat_id,sorozatleiras:item.sorozat_leiras})}>
             <Image 
             source={{uri:'http://172.16.0.24:3000/'+item.sorozat_kep}}
             style={{width:150,height:230,marginRight:10,marginTop:10,marginLeft:10,borderRadius:15}}

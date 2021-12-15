@@ -21,7 +21,7 @@ export default class Bevitel extends Component {
       headers: {"Content-type": "application/json; charset=UTF-8"}
       } )
       .then((response) => response.text())
-      .then((szoveg) => {
+      .then(() => {
 
       })
       .catch((error) =>{
@@ -54,8 +54,3 @@ export default class Bevitel extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  
-   
-  });

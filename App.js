@@ -8,6 +8,7 @@ import Ajanlas from './Ajanlas'
 import Header from './header.js'
 
 
+
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
@@ -17,8 +18,7 @@ export default class App extends React.Component{
   }
   createHomeStack = () =>
   <Stack.Navigator screenOptions={{
-    headerStyle:{backgroundColor:"#31364b"},
-    
+    headerStyle:{backgroundColor:"#2596be"}
     }} >
     <Stack.Screen
     name="Sorozatok"
@@ -27,7 +27,7 @@ export default class App extends React.Component{
     headerTitle:()=><Header/>
   }}
     />
-    <Stack.Screen name='Sorozatsajat' component={Sorozatsajat} options={({route}) => ({title: route.params.sorozatnev })}/>
+    <Stack.Screen name='Sorozatsajat' component={Sorozatsajat} options={{headerTitle:""}}/>
   </Stack.Navigator>
 
 

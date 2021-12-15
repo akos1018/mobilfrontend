@@ -15,7 +15,7 @@ export default class Bevitel extends Component {
       bevitel1:this.state.szoveg,
 
     }
-    fetch('http://192.168.1.128:3000/ajanlas', {
+    fetch('http://172.16.0.24:3000/ajanlas', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
