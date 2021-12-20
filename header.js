@@ -11,8 +11,8 @@ export default class Header extends React.Component{
     render(){
         return(
             <View style={{justifyContent:"center",alignItems:"center",flexDirection:"row",width:"130%"}}>
-                <View >
-                <Text style={{fontWeight:"bold",color:"white",letterSpacing:1,fontSize:25}}>Sorozat</Text>
+                <View>
+                    <Text style={{fontWeight:"bold",color:"white",letterSpacing:1,fontSize:25}}>Sorozat</Text>
                 </View>
             </View>
         );
