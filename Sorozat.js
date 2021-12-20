@@ -206,7 +206,12 @@ export default class Sorozat2 extends React.Component {
           keyExtractor={({sorozat_id}) => sorozat_id} 
           renderItem={({item}) =>
           <View>
-            <TouchableOpacity onPress={async()=>this.props.navigation.navigate('Sorozatsajat',{sorozatnev:item.sorozat_cim,sorozathossz:item.sorozat_hossz,sorozatid:item.sorozat_id,sorozatleiras:item.sorozat_leiras})}>
+            <TouchableOpacity onPress={async()=>this.props.navigation.navigate('Sorozatsajat',{sorozatnev:item.sorozat_cim,
+            sorozathossz:item.sorozat_hossz,
+            sorozatid:item.sorozat_id,
+            sorozatleiras:item.sorozat_leiras,
+            sorozatev:item.sorozat_ev
+            })}>
             <Image 
             source={{uri:'http://192.168.1.128:3000/'+item.sorozat_kep}}
             style={{width:150,height:230,marginRight:10,marginTop:10,marginLeft:10,borderRadius:15}}

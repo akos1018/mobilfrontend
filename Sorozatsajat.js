@@ -1,6 +1,5 @@
-import { NavigationContainer,DrawerActions } from '@react-navigation/native';
 import React, { Component } from 'react';
-import { Text, TextInput, View, FlatList,Image,TouchableOpacity } from 'react-native';
+import { Text, TextInput, View, FlatList,Image,TouchableOpacity,SafeAreaView,ScrollView,LogBox } from 'react-native';
 import StarRating from 'react-native-star-rating'
 
 export default class Sorozatsajat extends Component {
@@ -16,7 +15,7 @@ export default class Sorozatsajat extends Component {
     let bemenet1 = {
       bevitel3:this.props.route.params.sorozatid
     }
-    return fetch('http://192.168.1.128:3000/kommentek', {
+    fetch('http://192.168.1.128:3000/kommentek', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -35,7 +34,26 @@ export default class Sorozatsajat extends Component {
         console.error(error);
       });
 
-      
+      fetch('http://192.168.1.128:3000/sorozatkep', {
+      method: "POST",
+      body: JSON.stringify(bemenet1),
+      headers: {"Content-type": "application/json; charset=UTF-8"}
+      } )
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          isLoading: false,
+          dataSource2: responseJson,
+        }, function(){
+
+        });
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+
+      LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }
 
 
@@ -67,13 +85,36 @@ export default class Sorozatsajat extends Component {
 
   render() {
 
-    const {sorozatnev,sorozatid,sorozatleiras} = this.props.route.params
+    const {sorozatnev,sorozatid,sorozatleiras,sorozatev} = this.props.route.params
 
     return (
-      <View style={{justifyContent:"center",alignItems:"center",flex:1}}>
-        <Text style={{fontSize:30}} >{sorozatnev}</Text>
-        <Text style={{fontSize:30}} >{sorozatid}</Text>
-        <Text>{sorozatleiras}</Text>
+      <SafeAreaView style={{backgroundColor:"#262626",flex:1}}>
+        <ScrollView nestedScrollEnabled={true}>
+          <View style={{alignItems:"center",marginTop:10}}>
+          <FlatList
+          scrollEnabled={false}
+          style={{height:300}}
+          showsVerticalScrollIndicator={false}
+          data={this.state.dataSource2}
+          keyExtractor={({sorozat_id}) => sorozat_id} 
+          renderItem={({item}) =>
+          <Image 
+          source={{uri:'http://192.168.1.128:3000/'+item.sorozat_kep}}
+          style={{width:200,height:300,borderRadius:5}}
+          />
+          }
+          />
+        </View>
+
+        <View style={{padding:10}}>
+          <Text style={{fontSize:20,color:"white",fontWeight:"bold"}}>Leírás:</Text>
+          <Text style={{fontSize:14,color:"white",padding:2}}>{sorozatleiras}</Text>
+          <Text style={{fontSize:20,color:"white",fontWeight:"bold"}}>További infók:</Text>
+          <Text style={{fontSize:14,color:"white"}}>Eredeti sugárzás: {sorozatev}</Text>
+        </View>
+        <View>
+
+        
 
         <TextInput
           style={{height: 100,borderWidth:1,padding:5,width:250,alignSelf:"center",margin:10,color:"white",textAlignVertical:"top",backgroundColor:"lightblue",borderRadius:6,borderColor:"transparent",color:"black"}}
@@ -99,9 +140,9 @@ export default class Sorozatsajat extends Component {
             </View>
           }
           />
-
-        
-      </View>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }

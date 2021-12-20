@@ -33,7 +33,7 @@ export default class App extends React.Component{
   }
 }
     />
-    <Stack.Screen name='Sorozatsajat' component={Sorozatsajat} options={{headerTitle:""}}/>
+    <Stack.Screen name='Sorozatsajat' component={Sorozatsajat} options={({ route }) => ({ title: route.params.sorozatnev })}/>
   </Stack.Navigator>
 
   createFilmekStack = () =>
