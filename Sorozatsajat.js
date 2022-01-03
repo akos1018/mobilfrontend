@@ -6,7 +6,8 @@ export default class Sorozatsajat extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      komment:''
+      komment:'',
+      nev:''
 
     };
   }
@@ -15,7 +16,7 @@ export default class Sorozatsajat extends Component {
     let bemenet1 = {
       bevitel3:this.props.route.params.sorozatid
     }
-    fetch('http://192.168.1.128:3000/kommentek', {
+    fetch('http://172.16.0.11:3000/kommentek', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -34,7 +35,7 @@ export default class Sorozatsajat extends Component {
         console.error(error);
       });
 
-      fetch('http://192.168.1.128:3000/sorozatkep', {
+      fetch('http://172.16.0.11:3000/sorozatkep', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -60,11 +61,12 @@ export default class Sorozatsajat extends Component {
   felvitel=async()=>{
     //alert("Megnyomva")
     let bemenet={
-      bevitel1:this.state.komment,
-      bevitel2:this.props.route.params.sorozatid
+      bevitel1:this.state.nev,
+      bevitel2:this.state.komment,
+      bevitel3:this.props.route.params.sorozatid
 
     }
-    fetch('http://192.168.1.128:3000/kommentfelvitel', {
+    fetch('http://172.16.0.11:3000/kommentfelvitel', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -78,6 +80,7 @@ export default class Sorozatsajat extends Component {
       });
 
       this.setState({komment:""})
+      this.setState({nev:""})
 
       
   }
@@ -99,7 +102,7 @@ export default class Sorozatsajat extends Component {
           keyExtractor={({sorozat_id}) => sorozat_id} 
           renderItem={({item}) =>
           <Image 
-          source={{uri:'http://192.168.1.128:3000/'+item.sorozat_kep}}
+          source={{uri:'http://172.16.0.11:3000/'+item.sorozat_kep}}
           style={{width:200,height:300,borderRadius:5}}
           />
           }
@@ -111,30 +114,39 @@ export default class Sorozatsajat extends Component {
           <Text style={{fontSize:14,color:"white",padding:2}}>{sorozatleiras}</Text>
           <Text style={{fontSize:20,color:"white",fontWeight:"bold"}}>További infók:</Text>
           <Text style={{fontSize:14,color:"white"}}>Eredeti sugárzás: {sorozatev}</Text>
+          <Text style={{fontSize:20,color:"white",fontWeight:"bold"}}>Kommentek:</Text>
         </View>
         <View>
 
-        
+        <TextInput
+          style={{borderWidth:1,padding:5,marginBottom:10,color:"white",backgroundColor:"lightgrey",borderRadius:15,borderColor:"transparent",color:"black",width:100,marginLeft:30}}
+          onChangeText={(nev) => this.setState({nev})}
+          value={this.state.nev}
+          multiline={true}
+          placeholder='Név'
+        />
 
         <TextInput
-          style={{height: 100,borderWidth:1,padding:5,width:250,alignSelf:"center",margin:10,color:"white",textAlignVertical:"top",backgroundColor:"lightblue",borderRadius:6,borderColor:"transparent",color:"black"}}
+          style={{borderWidth:1,padding:5,marginBottom:10,color:"white",backgroundColor:"lightgrey",borderRadius:15,borderColor:"transparent",color:"black",width:300,marginLeft:30}}
           onChangeText={(komment) => this.setState({komment})}
           value={this.state.komment}
           multiline={true}
+          placeholder='Hozzászólás irása'
         />
 
         <TouchableOpacity 
-        style={{marginTop:8,borderWidth:1,width:150,alignSelf:"center",borderColor:"transparent",backgroundColor:"#C3D7BC",borderRadius:3}}
+        style={{borderWidth:1,width:100,alignSelf:"center",borderColor:"transparent",borderRadius:6,padding:2,backgroundColor:"grey",marginBottom:10}}
         onPress={async()=> this.felvitel()}
         >
-          <Text style={{textAlign:"center",fontSize:23,color:"white",borderRadius:5}}>Felvitel</Text>
+          <Text style={{textAlign:"center",fontSize:18,color:"white"}}>Mehet</Text>
         </TouchableOpacity>
         
           <FlatList
             data={this.state.dataSource}
             keyExtractor={({komment_id}) => komment_id} 
             renderItem={({item}) =>
-            <View>
+            <View style={{borderWidth:1,width:150,borderColor:"transparent",borderRadius:10,padding:8,backgroundColor:"lightgrey",margin:7,marginLeft:15}}>
+            <Text style={{color:"black",fontWeight:"bold",fontSize:17}}>{item.komment_nev}</Text>
             <Text>{item.komment_szoveg}</Text>
               
             </View>
