@@ -1,19 +1,16 @@
 import * as React from 'react';
-import {View,Icon,Text} from 'react-native';
+import {View} from 'react-native';
 import { NavigationContainer, } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Ionicons,MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons,MaterialCommunityIcons,MaterialIcons } from "@expo/vector-icons";
 import Sorozat from './Sorozat.js'
 import Sorozatsajat from './Sorozatsajat.js'
 import Ajanlas from './Ajanlas'
 import Header from './header.js'
-import Komment from './Komment.js'
+import Film from './Film.js'
+import Filmsajat from './Filmsajat.js'
 
-
-
-const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const BottomTab = createMaterialBottomTabNavigator();
 
@@ -26,7 +23,7 @@ export default class App extends React.Component{
     headerStyle:{backgroundColor:"#2596be"}
     }} >
     <Stack.Screen
-    name="Sorozat"
+    name="Sorozatok"
     component={Sorozat}
     options={{
     headerTitle:()=><Header/>
@@ -42,8 +39,9 @@ export default class App extends React.Component{
     }} >
     <Stack.Screen
     name="Filmek"
-    component={Komment}
+    component={Film}
     />
+    <Stack.Screen name='Filmsajat' component={Filmsajat} options={({ route }) => ({ title: route.params.filmnev })}/>
   </Stack.Navigator>
 
   createAjanlasStack = () =>
@@ -60,8 +58,8 @@ export default class App extends React.Component{
 
     return(
       <NavigationContainer>
-        <BottomTab.Navigator barStyle={{backgroundColor:"gray"}}>
-          <BottomTab.Screen name="Sorozatok" component={this.createSorozatStack} options={{
+        <BottomTab.Navigator barStyle={{backgroundColor:"lightgrey"}}>
+          <BottomTab.Screen name="Sorozat" component={this.createSorozatStack} options={{
             tabBarIcon: ({focused}) => 
             (<View>
               <Ionicons name={focused ? 'tv-sharp': 'tv-outline'} size={25} ></Ionicons>
@@ -73,7 +71,18 @@ export default class App extends React.Component{
               <MaterialCommunityIcons name={focused ? 'movie-open': 'movie-open-outline'} size={25} ></MaterialCommunityIcons>
             </View>)
           }}/>
-          <BottomTab.Screen name="Ajanlo" component={this.createAjanlasStack}/>
+          <BottomTab.Screen name="Ajanlo" component={this.createAjanlasStack} options={{
+            tabBarIcon: () => 
+            (<View>
+              <MaterialIcons name={'recommend'} size={25} ></MaterialIcons>
+            </View>)
+          }}/>
+          <BottomTab.Screen name="A" component={this.createAjanlasStack} options={{
+            tabBarIcon: () => 
+            (<View>
+              <MaterialIcons name={'recommend'} size={25} ></MaterialIcons>
+            </View>)
+          }}/>
         </BottomTab.Navigator>
       </NavigationContainer>
 

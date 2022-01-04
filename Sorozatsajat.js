@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, TextInput, View, FlatList,Image,TouchableOpacity,SafeAreaView,ScrollView,LogBox } from 'react-native';
-import StarRating from 'react-native-star-rating'
+
 
 export default class Sorozatsajat extends Component {
   constructor(props) {
@@ -82,13 +82,34 @@ export default class Sorozatsajat extends Component {
       this.setState({komment:""})
       this.setState({nev:""})
 
-      
+      let bemenet1 = {
+        bevitel3:this.props.route.params.sorozatid
+      }
+      fetch('http://172.16.0.11:3000/kommentek', {
+      method: "POST",
+      body: JSON.stringify(bemenet1),
+      headers: {"Content-type": "application/json; charset=UTF-8"}
+      } )
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          isLoading: false,
+          dataSource: responseJson,
+        }, function(){
+
+        });
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
   }
+  
 
 
   render() {
 
-    const {sorozatnev,sorozatid,sorozatleiras,sorozatev} = this.props.route.params
+    const {sorozatnev,sorozatid,sorozatleiras,sorozatev,sorozatido,sorozatevad,sorozatepizod} = this.props.route.params
 
     return (
       <SafeAreaView style={{backgroundColor:"#262626",flex:1}}>
@@ -110,11 +131,26 @@ export default class Sorozatsajat extends Component {
         </View>
 
         <View style={{padding:10}}>
-          <Text style={{fontSize:20,color:"white",fontWeight:"bold"}}>Leírás:</Text>
-          <Text style={{fontSize:14,color:"white",padding:2}}>{sorozatleiras}</Text>
-          <Text style={{fontSize:20,color:"white",fontWeight:"bold"}}>További infók:</Text>
-          <Text style={{fontSize:14,color:"white"}}>Eredeti sugárzás: {sorozatev}</Text>
-          <Text style={{fontSize:20,color:"white",fontWeight:"bold"}}>Kommentek:</Text>
+          <Text style={{fontSize:22,color:"#2596be",fontWeight:"bold"}}>Leírás:</Text>
+          <Text style={{fontSize:15,color:"white",padding:2}}>{sorozatleiras}</Text>
+          <Text style={{fontSize:22,color:"#2596be",fontWeight:"bold",marginTop:2}}>További infók:</Text>
+          <Text>
+            <Text style={{fontSize:16,color:"white",fontWeight:"bold"}}>Eredeti sugárzás: </Text>
+            <Text style={{fontSize:16,color:"white"}}>{sorozatev}</Text>
+          </Text>
+          <Text>
+            <Text style={{fontSize:16,color:"white",fontWeight:"bold"}}>Évadok száma: </Text>
+            <Text style={{fontSize:16,color:"white"}}>{sorozatevad}</Text>
+          </Text>
+          <Text>
+            <Text style={{fontSize:16,color:"white",fontWeight:"bold"}}>Epizódok száma: </Text>
+            <Text style={{fontSize:16,color:"white"}}>{sorozatepizod}</Text>
+          </Text>
+          <Text>
+            <Text style={{fontSize:16,color:"white",fontWeight:"bold"}}>Részenkénti idő: </Text>
+            <Text style={{fontSize:16,color:"white"}}>{sorozatido} perc</Text>
+          </Text>
+          <Text style={{fontSize:22,color:"#2596be",fontWeight:"bold",marginTop:2}}>Kommentek:</Text>
         </View>
         <View>
 
@@ -127,7 +163,7 @@ export default class Sorozatsajat extends Component {
         />
 
         <TextInput
-          style={{borderWidth:1,padding:5,marginBottom:10,color:"white",backgroundColor:"lightgrey",borderRadius:15,borderColor:"transparent",color:"black",width:300,marginLeft:30}}
+          style={{borderWidth:1,padding:5,marginBottom:10,color:"white",backgroundColor:"lightgrey",borderRadius:15,borderColor:"transparent",color:"black",width:300,height:50,marginLeft:30}}
           onChangeText={(komment) => this.setState({komment})}
           value={this.state.komment}
           multiline={true}
@@ -138,7 +174,7 @@ export default class Sorozatsajat extends Component {
         style={{borderWidth:1,width:100,alignSelf:"center",borderColor:"transparent",borderRadius:6,padding:2,backgroundColor:"grey",marginBottom:10}}
         onPress={async()=> this.felvitel()}
         >
-          <Text style={{textAlign:"center",fontSize:18,color:"white"}}>Mehet</Text>
+          <Text style={{textAlign:"center",fontSize:19,color:"white"}}>Mehet</Text>
         </TouchableOpacity>
         
           <FlatList
@@ -146,8 +182,8 @@ export default class Sorozatsajat extends Component {
             keyExtractor={({komment_id}) => komment_id} 
             renderItem={({item}) =>
             <View style={{borderWidth:1,width:150,borderColor:"transparent",borderRadius:10,padding:8,backgroundColor:"lightgrey",margin:7,marginLeft:15}}>
-            <Text style={{color:"black",fontWeight:"bold",fontSize:17}}>{item.komment_nev}</Text>
-            <Text>{item.komment_szoveg}</Text>
+            <Text style={{color:"black",fontWeight:"bold",fontSize:15}}>{item.komment_nev}</Text>
+            <Text style={{fontSize:17}}>{item.komment_szoveg}</Text>
               
             </View>
           }
