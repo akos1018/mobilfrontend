@@ -1,6 +1,7 @@
 import React from 'react';
 import { FlatList, ActivityIndicator, Text, View,Image,Button,TouchableOpacity,Modal,Pressable,StyleSheet,TextInput  } from 'react-native';
 import { MaterialIcons } from "@expo/vector-icons";
+import {Picker} from '@react-native-picker/picker';
 
 
 export default class Sorozat extends React.Component {
@@ -10,14 +11,15 @@ export default class Sorozat extends React.Component {
     this.state ={ 
       isLoading: true,
       cim:'',
-      aktmufaj:1
+      aktmufaj:1,
+      pickervalue:""
       
     }
   }
 
   
   componentDidMount(){
-     fetch('http://172.16.0.11:3000/sorozat')
+     fetch('http://172.16.0.19:3000/sorozat')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -34,7 +36,7 @@ export default class Sorozat extends React.Component {
         console.error(error);
       });
 
-      fetch('http://172.16.0.11:3000/mufaj')
+      fetch('http://172.16.0.19:3000/mufaj')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -62,7 +64,7 @@ export default class Sorozat extends React.Component {
 
 
     }
-    fetch('http://172.16.0.11:3000/kereses', {
+    fetch('http://172.16.0.19:3000/kereses', {
      method: "POST",
      body: JSON.stringify(bemenet),
      headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -92,7 +94,7 @@ export default class Sorozat extends React.Component {
     let bemenet={
       bevitel2:szam
     }
-    return fetch('http://172.16.0.11:3000/sorozatszures', {
+    return fetch('http://172.16.0.19:3000/sorozatszures', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -116,7 +118,7 @@ export default class Sorozat extends React.Component {
 
   osszes= async() =>
   {
-    fetch('http://172.16.0.11:3000/sorozat')
+    fetch('http://172.16.0.19:3000/sorozat')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -134,6 +136,35 @@ export default class Sorozat extends React.Component {
 
 
   }
+
+  evszures = (itemValue) =>{
+    this.setState({pickervalue:itemValue})
+
+    let bemenet={
+      bevitel1:itemValue
+    }
+    return fetch('http://172.16.0.19:3000/evszures', {
+      method: "POST",
+      body: JSON.stringify(bemenet),
+      headers: {"Content-type": "application/json; charset=UTF-8"}
+      } )
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          isLoading: false,
+          dataSource: responseJson,
+        }, function(){
+
+        });
+
+        
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+  }
+
  
 
 
@@ -148,21 +179,46 @@ export default class Sorozat extends React.Component {
     return(
       <View style={{flex:1,paddingTop:20,backgroundColor:"#262626",justifyContent:"center",alignItems:"center",paddingBottom:10,overflow:'hidden'}}>
         <View style={{flexDirection:'row'}}>
-        <TextInput
-        placeholderTextColor="black"
-        style={{height: 45,backgroundColor:"#DCDCDC", borderRadius:10, padding:10, width:240,margin:20,marginRight:10, textAlign:"center", }}
-        placeholder="Keresés"
-        onChangeText={(cim) => this.setState({cim})}
-        value={this.state.cim}
-        />
+          <TextInput
+          placeholderTextColor="black"
+          style={{height: 45,backgroundColor:"#DCDCDC", borderRadius:10, padding:10, width:240,margin:20,marginRight:10, textAlign:"center", }}
+          placeholder="Keresés"
+          onChangeText={(cim) => this.setState({cim})}
+          value={this.state.cim}
+          />
 
-        <TouchableOpacity 
-          onPress={async ()=>this.kereses()}>
-          <View style={{width:45,height:50,backgroundColor:"#2596be", borderRadius:10,padding:5,marginTop:20, height:45,marginRight:20}}>
-        
-            <MaterialIcons name='search' size={35}/>
-          </View>
-        </TouchableOpacity>
+          <TouchableOpacity 
+            onPress={async ()=>this.kereses()}>
+            <View style={{width:45,height:50,backgroundColor:"#2596be", borderRadius:10,padding:5,marginTop:20, height:45,marginRight:20}}>
+          
+              <MaterialIcons name='search' size={35} />
+            </View>
+          </TouchableOpacity>
+
+        </View>
+        <View>
+        <Picker
+          selectedValue={this.state.pickervalue}
+          style={{width: 100,color:"white" }}
+          onValueChange={(itemValue) => this.evszures(itemValue)}
+        >
+          <Picker.Item label="2006" value="2006" />
+          <Picker.Item label="2007" value="2007" />
+          <Picker.Item label="2008" value="2008" />
+          <Picker.Item label="2009" value="2009" />
+          <Picker.Item label="2010" value="2010" />
+          <Picker.Item label="2011" value="2011" />
+          <Picker.Item label="2012" value="2012" />
+          <Picker.Item label="2013" value="2013" />
+          <Picker.Item label="2014" value="2014" />
+          <Picker.Item label="2015" value="2015" />
+          <Picker.Item label="2016" value="2016" />
+          <Picker.Item label="2017" value="2017" />
+          <Picker.Item label="2018" value="2018" />
+          <Picker.Item label="2019" value="2019" />
+          <Picker.Item label="2020" value="2020" />
+          <Picker.Item label="2021" value="2021" />
+        </Picker>
         </View>
         
         <View style={{height:50, marginBottom:10,flexDirection:'row', }}>
@@ -216,7 +272,7 @@ export default class Sorozat extends React.Component {
             sorozatepizod:item.sorozat_epizodszam
             })}>
             <Image 
-            source={{uri:'http://172.16.0.11:3000/'+item.sorozat_kep}}
+            source={{uri:'http://172.16.0.19:3000/'+item.sorozat_kep}}
             style={{width:150,height:230,marginRight:10,marginTop:10,marginLeft:10,borderRadius:15}}
             />
             <Text style={{color:"white",marginLeft:15,marginTop:5,fontSize:16,fontWeight:"bold",width:155}}>{item.sorozat_cim}</Text>

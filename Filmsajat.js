@@ -16,8 +16,27 @@ export default class Filmsajat extends Component {
     let bemenet1 = {
       bevitel3:this.props.route.params.filmid
     }
+
+    fetch('http://172.16.0.19:3000/filmkommentek', {
+      method: "POST",
+      body: JSON.stringify(bemenet1),
+      headers: {"Content-type": "application/json; charset=UTF-8"}
+      } )
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          isLoading: false,
+          dataSource: responseJson,
+        }, function(){
+
+        });
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
     
-      fetch('http://172.16.0.11:3000/filmkep', {
+      fetch('http://172.16.0.19:3000/filmkep', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -39,11 +58,59 @@ export default class Filmsajat extends Component {
       LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }
 
+  felvitel=async()=>{
+    //alert("Megnyomva")
+    let bemenet={
+      bevitel1:this.state.nev,
+      bevitel2:this.state.komment,
+      bevitel3:this.props.route.params.filmid
+
+    }
+    fetch('http://172.16.0.19:3000/filmkommentfelvitel', {
+      method: "POST",
+      body: JSON.stringify(bemenet),
+      headers: {"Content-type": "application/json; charset=UTF-8"}
+      } )
+      .then((response) => response.text())
+      .then(() => {
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+
+      this.setState({komment:""})
+      this.setState({nev:""})
+
+      let bemenet1 = {
+        bevitel3:this.props.route.params.filmid
+      }
+      fetch('http://172.16.0.19:3000/filmkommentek', {
+      method: "POST",
+      body: JSON.stringify(bemenet1),
+      headers: {"Content-type": "application/json; charset=UTF-8"}
+      } )
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          isLoading: false,
+          dataSource: responseJson,
+        }, function(){
+
+        });
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+  }
+  
+
 
   
   render() {
 
-    const {filmnev,filmid,filmleiras,filmev} = this.props.route.params
+    const {filmnev,filmid,filmleiras,filmev,filmhossz} = this.props.route.params
 
     return (
       <SafeAreaView style={{backgroundColor:"#262626",flex:1}}>
@@ -57,19 +124,29 @@ export default class Filmsajat extends Component {
           keyExtractor={({film_id}) => film_id} 
           renderItem={({item}) =>
           <Image 
-          source={{uri:'http://172.16.0.11:3000/'+item.film_kep}}
+          source={{uri:'http://172.16.0.19:3000/'+item.film_kep}}
           style={{width:200,height:300,borderRadius:5}}
           />
           }
           />
         </View>
+        <View>
+            <Text style={{color:"white",fontSize:25,fontWeight:"bold",textAlign:"center"}}>{filmnev}</Text>
+        </View>
 
         <View style={{padding:10}}>
-          <Text style={{fontSize:20,color:"white",fontWeight:"bold"}}>Leírás:</Text>
-          <Text style={{fontSize:14,color:"white",padding:2}}>{filmleiras}</Text>
-          <Text style={{fontSize:20,color:"white",fontWeight:"bold"}}>További infók:</Text>
-          <Text style={{fontSize:14,color:"white"}}>Eredeti sugárzás: {filmev}</Text>
-          <Text style={{fontSize:20,color:"white",fontWeight:"bold"}}>Kommentek:</Text>
+          <Text style={{fontSize:22,color:"#2596be",fontWeight:"bold"}}>Leírás:</Text>
+          <Text style={{fontSize:15,color:"white",padding:2}}>{filmleiras}</Text>
+          <Text style={{fontSize:22,color:"#2596be",fontWeight:"bold",marginTop:2}}>További infók:</Text>
+          <Text>
+            <Text style={{fontSize:16,color:"white",fontWeight:"bold"}}>Megjelenés dátuma: </Text>
+            <Text style={{fontSize:16,color:"white"}}>{filmev}</Text>
+          </Text>
+          <Text>
+            <Text style={{fontSize:16,color:"white",fontWeight:"bold"}}>Hossz: </Text>
+            <Text style={{fontSize:16,color:"white"}}>{filmhossz} perc</Text>
+          </Text>
+          <Text style={{fontSize:22,color:"#2596be",fontWeight:"bold",marginTop:2}}>Kommentek:</Text>
         </View>
         <View>
 
@@ -98,11 +175,11 @@ export default class Filmsajat extends Component {
         
           <FlatList
             data={this.state.dataSource}
-            keyExtractor={({komment_id}) => komment_id} 
+            keyExtractor={({film_komment_id}) => film_komment_id} 
             renderItem={({item}) =>
             <View style={{borderWidth:1,width:150,borderColor:"transparent",borderRadius:10,padding:8,backgroundColor:"lightgrey",margin:7,marginLeft:15}}>
-            <Text style={{color:"black",fontWeight:"bold",fontSize:17}}>{item.komment_nev}</Text>
-            <Text>{item.komment_szoveg}</Text>
+            <Text style={{color:"black",fontWeight:"bold",fontSize:17}}>{item.film_komment_nev}</Text>
+            <Text>{item.film_komment_szoveg}</Text>
               
             </View>
           }

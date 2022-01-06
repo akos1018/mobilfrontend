@@ -7,7 +7,10 @@ import { Ionicons,MaterialCommunityIcons,MaterialIcons } from "@expo/vector-icon
 import Sorozat from './Sorozat.js'
 import Sorozatsajat from './Sorozatsajat.js'
 import Ajanlas from './Ajanlas'
-import Header from './header.js'
+import SorozatHeader from './SorozatHeader.js'
+import FilmHeader from './FilmHeader.js'
+import HomeHeader from './HomeHeader.js'
+import AjanlasHeader from './AjanlasHeader.js'
 import Film from './Film.js'
 import Filmsajat from './Filmsajat.js'
 
@@ -26,7 +29,7 @@ export default class App extends React.Component{
     name="Sorozatok"
     component={Sorozat}
     options={{
-    headerTitle:()=><Header/>
+    headerTitle:()=><SorozatHeader/>
   }
 }
     />
@@ -40,6 +43,10 @@ export default class App extends React.Component{
     <Stack.Screen
     name="Filmek"
     component={Film}
+    options={{
+      headerTitle:()=><FilmHeader/>
+    }
+  } 
     />
     <Stack.Screen name='Filmsajat' component={Filmsajat} options={({ route }) => ({ title: route.params.filmnev })}/>
   </Stack.Navigator>
@@ -51,6 +58,10 @@ export default class App extends React.Component{
     <Stack.Screen
     name="Ajanlas"
     component={Ajanlas}
+    options={{
+      headerTitle:()=><AjanlasHeader/>
+    }
+  }
     />
   </Stack.Navigator>
 
@@ -58,7 +69,13 @@ export default class App extends React.Component{
 
     return(
       <NavigationContainer>
-        <BottomTab.Navigator barStyle={{backgroundColor:"lightgrey"}}>
+        <BottomTab.Navigator barStyle={{backgroundColor:"white"}}>
+        <BottomTab.Screen name="Home" component={this.createAjanlasStack} options={{
+            tabBarIcon: ({focused}) => 
+            (<View>
+              <Ionicons name={focused ? 'home-sharp': 'home-outline'} size={25} ></Ionicons>
+            </View>)
+          }}/>
           <BottomTab.Screen name="Sorozat" component={this.createSorozatStack} options={{
             tabBarIcon: ({focused}) => 
             (<View>
@@ -72,12 +89,6 @@ export default class App extends React.Component{
             </View>)
           }}/>
           <BottomTab.Screen name="Ajanlo" component={this.createAjanlasStack} options={{
-            tabBarIcon: () => 
-            (<View>
-              <MaterialIcons name={'recommend'} size={25} ></MaterialIcons>
-            </View>)
-          }}/>
-          <BottomTab.Screen name="A" component={this.createAjanlasStack} options={{
             tabBarIcon: () => 
             (<View>
               <MaterialIcons name={'recommend'} size={25} ></MaterialIcons>
