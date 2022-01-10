@@ -17,7 +17,7 @@ export default class Sorozat extends React.Component {
 
   
   componentDidMount(){
-     fetch('http://172.16.0.19:3000/film')
+     fetch('http://172.16.0.16:3000/film')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -34,7 +34,7 @@ export default class Sorozat extends React.Component {
         console.error(error);
       });
 
-      fetch('http://172.16.0.19:3000/filmmufaj')
+      fetch('http://172.16.0.16:3000/filmmufaj')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -62,7 +62,7 @@ export default class Sorozat extends React.Component {
 
 
     }
-    fetch('http://172.16.0.19:3000/filmkereses', {
+    fetch('http://172.16.0.16:3000/filmkereses', {
      method: "POST",
      body: JSON.stringify(bemenet),
      headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -92,7 +92,7 @@ export default class Sorozat extends React.Component {
     let bemenet={
       bevitel2:szam
     }
-    return fetch('http://172.16.0.11:3000/filmszures', {
+    return fetch('http://172.16.0.16:3000/filmszures', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -116,7 +116,7 @@ export default class Sorozat extends React.Component {
 
   osszes= async() =>
   {
-    fetch('http://172.16.0.19:3000/film')
+    fetch('http://172.16.0.16:3000/film')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -214,7 +214,7 @@ export default class Sorozat extends React.Component {
             filmido:item.film_hossz,
             })}>
             <Image 
-            source={{uri:'http://172.16.0.19:3000/'+item.film_kep}}
+            source={{uri:'http://172.16.0.16:3000/'+item.film_kep}}
             style={{width:150,height:230,marginRight:10,marginTop:10,marginLeft:10,borderRadius:15}}
             />
             <Text style={{color:"white",marginLeft:15,marginTop:5,fontSize:16,fontWeight:"bold",width:155}}>{item.film_cim}</Text>

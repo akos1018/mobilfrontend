@@ -12,20 +12,25 @@ export default class Sorozat extends React.Component {
       isLoading: true,
       cim:'',
       aktmufaj:1,
-      pickervalue:""
+      pickervalue:"",
+      evszamok:[],
       
     }
   }
 
   
   componentDidMount(){
-     fetch('http://172.16.0.19:3000/sorozat')
+     fetch('http://172.16.0.16:3000/sorozat')
       .then((response) => response.json())
       .then((responseJson) => {
+
+        
 
         this.setState({
           isLoading: false,
           dataSource: responseJson,
+          evszamok:responseJson
+
         }, function(){
 
         });
@@ -36,7 +41,7 @@ export default class Sorozat extends React.Component {
         console.error(error);
       });
 
-      fetch('http://172.16.0.19:3000/mufaj')
+      fetch('http://172.16.0.16:3000/mufaj')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -54,6 +59,9 @@ export default class Sorozat extends React.Component {
       .catch((error) =>{
         console.error(error);
       });
+
+      
+
       
       
   }
@@ -64,7 +72,7 @@ export default class Sorozat extends React.Component {
 
 
     }
-    fetch('http://172.16.0.19:3000/kereses', {
+    fetch('http://172.16.0.16:3000/kereses', {
      method: "POST",
      body: JSON.stringify(bemenet),
      headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -94,7 +102,7 @@ export default class Sorozat extends React.Component {
     let bemenet={
       bevitel2:szam
     }
-    return fetch('http://172.16.0.19:3000/sorozatszures', {
+    return fetch('http://172.16.0.16:3000/sorozatszures', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -118,7 +126,7 @@ export default class Sorozat extends React.Component {
 
   osszes= async() =>
   {
-    fetch('http://172.16.0.19:3000/sorozat')
+    fetch('http://172.16.0.16:3000/sorozat')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -143,7 +151,7 @@ export default class Sorozat extends React.Component {
     let bemenet={
       bevitel1:itemValue
     }
-    return fetch('http://172.16.0.19:3000/evszures', {
+    return fetch('http://172.16.0.16:3000/evszures', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -176,6 +184,18 @@ export default class Sorozat extends React.Component {
         </View>
       )
     }
+
+    let evszam = this.state.evszamok.map((item,index)=>{
+      return(
+        <Picker.Item label={item.sorozat_ev} value={index}/>
+      )
+      })
+
+
+    for (let index = 1970; index < 2020; index++) {
+      this.state.evszamok.push(index)
+      
+    }
     return(
       <View style={{flex:1,paddingTop:20,backgroundColor:"#262626",justifyContent:"center",alignItems:"center",paddingBottom:10,overflow:'hidden'}}>
         <View style={{flexDirection:'row'}}>
@@ -196,28 +216,14 @@ export default class Sorozat extends React.Component {
           </TouchableOpacity>
 
         </View>
-        <View>
+        <View style={{borderWidth:2,borderColor:"white",borderRadius:5}}>
         <Picker
           selectedValue={this.state.pickervalue}
-          style={{width: 100,color:"white" }}
+          style={{width: 100,height:10,color:"white",textAlignVertical:"center" }}
           onValueChange={(itemValue) => this.evszures(itemValue)}
         >
-          <Picker.Item label="2006" value="2006" />
-          <Picker.Item label="2007" value="2007" />
-          <Picker.Item label="2008" value="2008" />
-          <Picker.Item label="2009" value="2009" />
-          <Picker.Item label="2010" value="2010" />
-          <Picker.Item label="2011" value="2011" />
-          <Picker.Item label="2012" value="2012" />
-          <Picker.Item label="2013" value="2013" />
-          <Picker.Item label="2014" value="2014" />
-          <Picker.Item label="2015" value="2015" />
-          <Picker.Item label="2016" value="2016" />
-          <Picker.Item label="2017" value="2017" />
-          <Picker.Item label="2018" value="2018" />
-          <Picker.Item label="2019" value="2019" />
-          <Picker.Item label="2020" value="2020" />
-          <Picker.Item label="2021" value="2021" />
+         {evszam}
+
         </Picker>
         </View>
         
@@ -272,7 +278,7 @@ export default class Sorozat extends React.Component {
             sorozatepizod:item.sorozat_epizodszam
             })}>
             <Image 
-            source={{uri:'http://172.16.0.19:3000/'+item.sorozat_kep}}
+            source={{uri:'http://172.16.0.16:3000/'+item.sorozat_kep}}
             style={{width:150,height:230,marginRight:10,marginTop:10,marginLeft:10,borderRadius:15}}
             />
             <Text style={{color:"white",marginLeft:15,marginTop:5,fontSize:16,fontWeight:"bold",width:155}}>{item.sorozat_cim}</Text>
