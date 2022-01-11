@@ -13,7 +13,6 @@ export default class Sorozat extends React.Component {
       cim:'',
       aktmufaj:1,
       pickervalue:"",
-      evszamok:[],
       
     }
   }
@@ -29,7 +28,7 @@ export default class Sorozat extends React.Component {
         this.setState({
           isLoading: false,
           dataSource: responseJson,
-          evszamok:responseJson
+          
 
         }, function(){
 
@@ -59,8 +58,6 @@ export default class Sorozat extends React.Component {
       .catch((error) =>{
         console.error(error);
       });
-
-      
 
       
       
@@ -185,17 +182,6 @@ export default class Sorozat extends React.Component {
       )
     }
 
-    let evszam = this.state.evszamok.map((item,index)=>{
-      return(
-        <Picker.Item label={item.sorozat_ev} value={index}/>
-      )
-      })
-
-
-    for (let index = 1970; index < 2020; index++) {
-      this.state.evszamok.push(index)
-      
-    }
     return(
       <View style={{flex:1,paddingTop:20,backgroundColor:"#262626",justifyContent:"center",alignItems:"center",paddingBottom:10,overflow:'hidden'}}>
         <View style={{flexDirection:'row'}}>
@@ -216,16 +202,7 @@ export default class Sorozat extends React.Component {
           </TouchableOpacity>
 
         </View>
-        <View style={{borderWidth:2,borderColor:"white",borderRadius:5}}>
-        <Picker
-          selectedValue={this.state.pickervalue}
-          style={{width: 100,height:10,color:"white",textAlignVertical:"center" }}
-          onValueChange={(itemValue) => this.evszures(itemValue)}
-        >
-         {evszam}
 
-        </Picker>
-        </View>
         
         <View style={{height:50, marginBottom:10,flexDirection:'row', }}>
 
@@ -275,7 +252,8 @@ export default class Sorozat extends React.Component {
             sorozatev:item.sorozat_ev,
             sorozatido:item.sorozat_hossz,
             sorozatevad:item.sorozat_evadszam,
-            sorozatepizod:item.sorozat_epizodszam
+            sorozatepizod:item.sorozat_epizodszam,
+            sorozatmufaj:item.mufaj_nev
             })}>
             <Image 
             source={{uri:'http://172.16.0.16:3000/'+item.sorozat_kep}}

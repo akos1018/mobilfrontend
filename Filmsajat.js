@@ -134,6 +134,10 @@ export default class Filmsajat extends Component {
       bevitel2:this.props.route.params.filmid
 
     }
+    let bemenet1 = {
+      bevitel3:this.props.route.params.filmid
+    }
+    
     fetch('http://172.16.0.16:3000/filmertekeles', {
       method: "POST",
       body: JSON.stringify(bemenet),
@@ -142,6 +146,25 @@ export default class Filmsajat extends Component {
       .then((response) => response.text())
       .then(() => {
 
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+
+      fetch('http://172.16.0.16:3000/filmatlagertek', {
+      method: "POST",
+      body: JSON.stringify(bemenet1),
+      headers: {"Content-type": "application/json; charset=UTF-8"}
+      } )
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          isLoading: false,
+          dataSource3: responseJson,
+        }, function(){
+
+        });
       })
       .catch((error) =>{
         console.error(error);
@@ -155,7 +178,7 @@ export default class Filmsajat extends Component {
   
   render() {
 
-    const {filmnev,filmid,filmleiras,filmev,filmhossz} = this.props.route.params
+    const {filmnev,filmid,filmleiras,filmev,filmhossz,filmmufaj} = this.props.route.params
 
     return (
       <SafeAreaView style={{backgroundColor:"#262626",flex:1}}>
@@ -214,6 +237,10 @@ export default class Filmsajat extends Component {
           <Text style={{fontSize:22,color:"#2596be",fontWeight:"bold"}}>Leírás:</Text>
           <Text style={{fontSize:15,color:"white",padding:2}}>{filmleiras}</Text>
           <Text style={{fontSize:22,color:"#2596be",fontWeight:"bold",marginTop:2}}>További infók:</Text>
+          <Text>
+            <Text style={{fontSize:16,color:"white",fontWeight:"bold"}}>Műfaj: </Text>
+            <Text style={{fontSize:16,color:"white"}}>{filmmufaj}</Text>
+          </Text>
           <Text>
             <Text style={{fontSize:16,color:"white",fontWeight:"bold"}}>Megjelenés dátuma: </Text>
             <Text style={{fontSize:16,color:"white"}}>{filmev}</Text>

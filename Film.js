@@ -212,6 +212,7 @@ export default class Sorozat extends React.Component {
             filmleiras:item.film_leiras,
             filmev:item.film_ev,
             filmido:item.film_hossz,
+            filmmufaj:item.mufaj_nev
             })}>
             <Image 
             source={{uri:'http://172.16.0.16:3000/'+item.film_kep}}
