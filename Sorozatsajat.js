@@ -174,22 +174,23 @@ export default class Sorozatsajat extends Component {
 
   render() {
 
-    const {sorozatnev,sorozatid,sorozatleiras,sorozatev,sorozatido,sorozatevad,sorozatepizod,sorozatmufaj} = this.props.route.params
+    const {sorozatnev,sorozatleiras,sorozatev,sorozatido,sorozatevad,sorozatepizod,sorozatmufaj} = this.props.route.params
 
     return (
       <SafeAreaView style={{backgroundColor:"#262626",flex:1}}>
         <ScrollView nestedScrollEnabled={true}>
-        <View style={{marginTop:10,marginLeft:145, flexDirection:"row"}}>
-          <Ionicons name='star' size={30} color={'gold'}></Ionicons>
+        <View style={{marginTop:10,marginLeft:145, }}>
           <FlatList
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           data={this.state.dataSource3}
           keyExtractor={({ertekeles_id}) => ertekeles_id} 
           renderItem={({item}) =>
-          <View>
-            <Text style={{fontSize:28,color:"white"}}>{item.atlag}</Text>
+          <View style={{flexDirection:"row"}}>
+          <Ionicons name='star' size={30} color={'gold'}></Ionicons>
+          <Text style={{fontSize:28,color:"white",textAlignVertical:"bottom"}}>{item.atlag}</Text>
           </View>
+          
           }
           />
 

@@ -202,7 +202,6 @@ export default class Sorozat extends React.Component {
           </TouchableOpacity>
 
         </View>
-
         
         <View style={{height:50, marginBottom:10,flexDirection:'row', }}>
 
@@ -245,7 +244,8 @@ export default class Sorozat extends React.Component {
           keyExtractor={({sorozat_id}) => sorozat_id} 
           renderItem={({item}) =>
           <View>
-            <TouchableOpacity onPress={async()=>this.props.navigation.navigate('Sorozatsajat',{sorozatnev:item.sorozat_cim,
+            <TouchableOpacity onPress={async()=>this.props.navigation.navigate('Sorozatsajat',{
+            sorozatnev:item.sorozat_cim,
             sorozathossz:item.sorozat_hossz,
             sorozatid:item.sorozat_id,
             sorozatleiras:item.sorozat_leiras,

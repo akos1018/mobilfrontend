@@ -13,6 +13,7 @@ import HomeHeader from './HomeHeader.js'
 import AjanlasHeader from './AjanlasHeader.js'
 import Film from './Film.js'
 import Filmsajat from './Filmsajat.js'
+import Kezdooldal from './Home.js';
 
 const Stack = createStackNavigator();
 const BottomTab = createMaterialBottomTabNavigator();
@@ -65,12 +66,30 @@ export default class App extends React.Component{
     />
   </Stack.Navigator>
 
+  createHomeStack = () =>
+  <Stack.Navigator screenOptions={{
+    headerStyle:{backgroundColor:"#2596be"}
+    }} >
+    <Stack.Screen
+    name="Kezőoldal"
+    component={Kezdooldal}
+    options={{
+      headerTitle:()=><HomeHeader/>
+    }
+  }
+    />
+    <Stack.Screen name='Filmsajat' component={Filmsajat} options={({ route }) => ({ title: route.params.filmnev })}/>
+    <Stack.Screen name='Sorozatsajat' component={Sorozatsajat} options={({ route }) => ({ title: route.params.sorozatnev })}/>
+
+  </Stack.Navigator>
+  
+
   render(){
 
     return(
       <NavigationContainer>
         <BottomTab.Navigator barStyle={{backgroundColor:"white"}}>
-        <BottomTab.Screen name="Home" component={this.createAjanlasStack} options={{
+        <BottomTab.Screen name="Home" component={this.createHomeStack} options={{
             tabBarIcon: ({focused}) => 
             (<View>
               <Ionicons name={focused ? 'home-sharp': 'home-outline'} size={25} ></Ionicons>

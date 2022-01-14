@@ -33,22 +33,22 @@ export default class Bevitel extends Component {
 
   render() {
     return (
-      <View style={{padding: 10,margin:15,borderWidth:1,borderRadius:10,height:300,backgroundColor:"#1E5162",borderColor:"transparent",width:300,marginLeft:"auto",marginRight:"auto"}}>
-        <Text style={{padding: 5,textAlign:"center",color:"white",fontSize:21}}>
-          Ajánlj nekünk filmeket
+      <View style={{backgroundColor:"#262626",flex:1,alignItems:"center",paddingTop:40}}>
+        <Text style={{padding: 5,textAlign:"center",color:"white",fontSize:21,fontWeight:"bold",marginBottom:10}}>
+          Ha van egy film amit szeretnél látni de nem szerepel az alkalmazásban itt lehetőséged van nekünk ajánlani
           </Text>
         <TextInput
-          style={{height: 100,borderWidth:1,padding:5,width:250,alignSelf:"center",margin:10,color:"white",textAlignVertical:"top",backgroundColor:"lightblue",borderRadius:6,borderColor:"transparent",color:"black"}}
+          style={{borderWidth:1,padding:5,marginBottom:10,color:"white",backgroundColor:"lightgrey",borderRadius:15,borderColor:"transparent",color:"black",width:300,height:100,fontSize:25}}
           onChangeText={(szoveg) => this.setState({szoveg})}
           value={this.state.szoveg}
           multiline={true}
         />
 
         <TouchableOpacity 
-        style={{marginTop:8,borderWidth:1,width:150,alignSelf:"center",borderColor:"transparent",backgroundColor:"#C3D7BC",borderRadius:3}}
+        style={{marginTop:8,borderWidth:1,width:150,height:40,alignSelf:"center",borderColor:"transparent",backgroundColor:"#2596be",borderRadius:3,paddingTop:3}}
         onPress={async()=> this.felvitel()}
         >
-          <Text style={{textAlign:"center",fontSize:23,color:"white",borderRadius:5}}>Felvitel</Text>
+          <Text style={{textAlign:"center",fontSize:23,color:"white",borderRadius:5}}>Mehet</Text>
         </TouchableOpacity>
       </View>
     );
