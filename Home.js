@@ -3,8 +3,12 @@ import { FlatList, ActivityIndicator, Text, View,Image, TouchableOpacity,Dimensi
 
 
 
+
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
+
+
+ 
 
 export default class Kezdooldal extends React.Component {
 
@@ -14,11 +18,13 @@ export default class Kezdooldal extends React.Component {
       isLoading: true,
       dataSource:[],
       dataSource2:[],
+      dataSource3:[],
+      kepek:[]
     }
     
     setInterval(()=>{
       
-      fetch('http://172.16.0.16:3000/legjobbfilmek')
+      fetch('http://192.168.1.128:3000/legjobbfilmek')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -34,7 +40,7 @@ export default class Kezdooldal extends React.Component {
         console.error(error);
       });
 
-      fetch('http://172.16.0.16:3000/legjobbsorozatok')
+      fetch('http://192.168.1.128:3000/legjobbsorozatok')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -57,10 +63,7 @@ export default class Kezdooldal extends React.Component {
 
   componentDidMount(){
 
- 
-    
-
-  fetch('http://172.16.0.16:3000/legjobbfilmek')
+  fetch('http://192.168.1.128:3000/legjobbfilmek')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -76,7 +79,7 @@ export default class Kezdooldal extends React.Component {
         console.error(error);
       });
 
-      fetch('http://172.16.0.16:3000/legjobbsorozatok')
+      fetch('http://192.168.1.128:3000/legjobbsorozatok')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -92,9 +95,28 @@ export default class Kezdooldal extends React.Component {
         console.error(error);
       });
 
+      fetch('http://192.168.1.128:3000/legujabbsorozat')
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          isLoading: false,
+          dataSource3: responseJson,
+          kepek: responseJson
+        }, function(){
+
+        });
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+
+
 
   }
 
+  
   
   
 
@@ -109,9 +131,38 @@ export default class Kezdooldal extends React.Component {
       )
     }
 
+
+    
+    
+
+
     return(
       <ScrollView style={{flex:1,backgroundColor:"#262626"}}>
-        <View style={{height:height*0.35}}>
+        <View style={{height:height*0.35,flexDirection:"row"}}>
+          <View style={{flex:1}}>
+          <FlatList 
+            showsHorizontalScrollIndicator={false}
+            data={this.state.dataSource3}
+            horizontal
+            pagingEnabled
+            //numColumns={2}
+            keyExtractor={({sorozat_id}) => sorozat_id}
+            renderItem={({item}) =>
+              <Image 
+              source={{uri:'http://192.168.1.128:3000/'+item.sorozat_kep}}
+              style={{
+                width:width*0.55,
+                height:height*0.5,
+                margin:5,
+                borderRadius:15,
+              }}
+              />
+          }
+          />
+          </View>
+          <View style={{flex:1}}>
+            <Text>asd</Text>
+          </View>
 
         </View>
       <View style={{height:height*0.35}}>
@@ -133,7 +184,7 @@ export default class Kezdooldal extends React.Component {
               sorozatepizod:item.sorozat_epizodszam
               })}>
               <Image 
-              source={{uri:'http://172.16.0.16:3000/'+item.sorozat_kep}}
+              source={{uri:'http://192.168.1.128:3000/'+item.sorozat_kep}}
               style={{width:120,height:170,margin:5,borderRadius:15}}
               />
               <Text style={{color:"white",fontSize:13,fontWeight:"bold",textAlign:"center", width:135}}>{item.sorozat_cim}</Text>
@@ -162,7 +213,7 @@ export default class Kezdooldal extends React.Component {
             filmleiras:item.film_leiras
             })}>
             <Image 
-            source={{uri:'http://172.16.0.16:3000/'+item.film_kep}}
+            source={{uri:'http://192.168.1.128:3000/'+item.film_kep}}
             style={{width:120,height:170,margin:5,borderRadius:15}}
             />        
             <Text style={{color:"white",fontSize:13,fontWeight:"bold",textAlign:"center", width:125, alignItems:'center' }}>{item.film_cim}</Text>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View} from 'react-native';
+import {View,Dimensions} from 'react-native';
 import { NavigationContainer, } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -23,9 +23,9 @@ export default class App extends React.Component{
     super(props);
   }
   createSorozatStack = () =>
-  <Stack.Navigator screenOptions={{
-    headerStyle:{backgroundColor:"#2596be"}
-    }} >
+  <Stack.Navigator screenOptions={
+    {headerStyle:{backgroundColor:"#2596be"}}
+    }>
     <Stack.Screen
     name="Sorozatok"
     component={Sorozat}
@@ -34,7 +34,7 @@ export default class App extends React.Component{
   }
 }
     />
-    <Stack.Screen name='Sorozatsajat' component={Sorozatsajat} options={({ route }) => ({ title: route.params.sorozatnev })}/>
+    <Stack.Screen name='Sorozatsajat' component={Sorozatsajat} options={({ route }) => ({ title: route.params.sorozatnev})}/>
   </Stack.Navigator>
 
   createFilmekStack = () =>

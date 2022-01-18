@@ -59,6 +59,7 @@ export default class Filmsajat extends Component {
       });
 
       LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+      LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop']);
 
       fetch('http://172.16.0.16:3000/filmatlagertek', {
       method: "POST",
