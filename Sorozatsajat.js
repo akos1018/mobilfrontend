@@ -3,12 +3,15 @@ import { Text, TextInput, View, FlatList,Image,TouchableOpacity,SafeAreaView,Scr
 import StarRating from 'react-native-star-rating'
 import { Ionicons } from '@expo/vector-icons';
 
-
+const ipcim = '172.16.0.16:3000'
 
 export default class Sorozatsajat extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      dataSource:[],
+      dataSource2:[],
+      dataSource3:[],
       komment:'',
       nev:'',
       starCount:0
@@ -20,7 +23,7 @@ export default class Sorozatsajat extends Component {
     let bemenet1 = {
       bevitel3:this.props.route.params.sorozatid
     }
-    fetch('http://172.16.0.16:3000/kommentek', {
+    fetch('http://'+ipcim+'/kommentek', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -39,7 +42,7 @@ export default class Sorozatsajat extends Component {
         console.error(error);
       });
 
-      fetch('http://172.16.0.16:3000/sorozatkep', {
+      fetch('http://'+ipcim+'/sorozatkep', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -58,7 +61,7 @@ export default class Sorozatsajat extends Component {
         console.error(error);
       });
 
-      fetch('http://172.16.0.16:3000/atlagertek', {
+      fetch('http://'+ipcim+'/atlagertek', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -80,6 +83,7 @@ export default class Sorozatsajat extends Component {
       LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
       LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop']);
 
+
   }
 
 
@@ -90,7 +94,7 @@ export default class Sorozatsajat extends Component {
       bevitel3:this.props.route.params.sorozatid
 
     }
-    fetch('http://172.16.0.16:3000/kommentfelvitel', {
+    fetch('http://'+ipcim+'/kommentfelvitel', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -109,7 +113,7 @@ export default class Sorozatsajat extends Component {
       let bemenet1 = {
         bevitel3:this.props.route.params.sorozatid
       }
-      fetch('http://172.16.0.16:3000/kommentek', {
+      fetch('http://'+ipcim+'/kommentek', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -136,7 +140,7 @@ export default class Sorozatsajat extends Component {
       bevitel2:this.props.route.params.sorozatid
 
     }
-    fetch('http://172.16.0.16:3000/ertekeles', {
+    fetch('http://'+ipcim+'/ertekeles', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -152,7 +156,7 @@ export default class Sorozatsajat extends Component {
       let bemenet1 = {
         bevitel3:this.props.route.params.sorozatid
       }
-      fetch('http://172.16.0.16:3000/atlagertek', {
+      fetch('http://'+ipcim+'/atlagertek', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -181,23 +185,25 @@ export default class Sorozatsajat extends Component {
     return (
       <SafeAreaView style={{backgroundColor:"#262626",flex:1}}>
         <ScrollView nestedScrollEnabled={true}>
-        <View style={{marginTop:10,marginLeft:145, }}>
+        <View style={{flexDirection:"row",alignSelf:"center",margin:6}}>
+          <View>
+          <Ionicons name='star' size={30} color={'gold'}></Ionicons>
+          </View>
+          <View>
           <FlatList
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           data={this.state.dataSource3}
           keyExtractor={({ertekeles_id}) => ertekeles_id} 
           renderItem={({item}) =>
-          <View style={{flexDirection:"row"}}>
-          <Ionicons name='star' size={30} color={'gold'}></Ionicons>
+          <View>
           <Text style={{fontSize:28,color:"white",textAlignVertical:"bottom"}}>{item.atlag}</Text>
           </View>
-          
           }
           />
-
+          </View>
         </View>
-          <View style={{alignItems:"center",marginTop:10}}>
+          <View style={{alignItems:"center"}}>
           <FlatList
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
@@ -205,7 +211,7 @@ export default class Sorozatsajat extends Component {
           keyExtractor={({sorozat_id}) => sorozat_id} 
           renderItem={({item}) =>
           <Image 
-          source={{uri:'http://172.16.0.16:3000/'+item.sorozat_kep}}
+          source={{uri:'http://'+ipcim+'/'+item.sorozat_kep}}
           style={{width:200,height:300,borderRadius:5}}
           />
           }
@@ -276,25 +282,37 @@ export default class Sorozatsajat extends Component {
           multiline={true}
           placeholder='Hozzászólás irása'
         />
-
+        
+        {this.state.nev == "" || this.state.komment == "" ?
+         <TouchableOpacity 
+         style={{borderWidth:1,width:100,alignSelf:"center",borderColor:"transparent",borderRadius:6,padding:2,backgroundColor:"grey",marginBottom:10}}
+         >
+           
+           <Text style={{textAlign:"center",fontSize:19,color:"white"}}>Az egyik mezőt üresen hagytad</Text>
+         </TouchableOpacity>
+        :
         <TouchableOpacity 
         style={{borderWidth:1,width:100,alignSelf:"center",borderColor:"transparent",borderRadius:6,padding:2,backgroundColor:"grey",marginBottom:10}}
         onPress={async()=> this.felvitel()}
         >
+          
           <Text style={{textAlign:"center",fontSize:19,color:"white"}}>Mehet</Text>
         </TouchableOpacity>
-        
+        }
+          {this.state.dataSource.length == 0 ?<Text style={{textAlign:"center",fontSize:19,color:"white"}}> Ehhez a sorozathoz nincsenek még kommentek </Text>  :
           <FlatList
-            data={this.state.dataSource}
-            keyExtractor={({komment_id}) => komment_id} 
-            renderItem={({item}) =>
-            <View style={{borderWidth:1,width:150,borderColor:"transparent",borderRadius:10,padding:8,backgroundColor:"lightgrey",margin:7,marginLeft:15}}>
-            <Text style={{color:"black",fontWeight:"bold",fontSize:15}}>{item.komment_nev}</Text>
-            <Text style={{fontSize:17}}>{item.komment_szoveg}</Text>
-              
-            </View>
-          }
-          />
+          data={this.state.dataSource}
+          keyExtractor={({komment_id}) => komment_id} 
+          renderItem={({item}) =>
+          <View style={{borderWidth:1,width:150,borderColor:"transparent",borderRadius:10,padding:8,backgroundColor:"lightgrey",margin:7,marginLeft:15}}>
+          <Text style={{color:"black",fontWeight:"bold",fontSize:15}}>{item.komment_nev}</Text>
+          <Text style={{fontSize:17}}>{item.komment_szoveg}</Text>
+            
+          </View>
+        }
+        />
+          
+        }
           </View>
         </ScrollView>
       </SafeAreaView>

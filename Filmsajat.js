@@ -3,7 +3,7 @@ import { Text, TextInput, View, FlatList,Image,TouchableOpacity,SafeAreaView,Scr
 import StarRating from 'react-native-star-rating';
 import { Ionicons } from '@expo/vector-icons';
 
-
+const ipcim = '172.16.0.16:3000'
 
 export default class Filmsajat extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ export default class Filmsajat extends Component {
       bevitel3:this.props.route.params.filmid
     }
 
-    fetch('http://172.16.0.16:3000/filmkommentek', {
+    fetch('http://'+ipcim+'/filmkommentek', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -39,7 +39,7 @@ export default class Filmsajat extends Component {
         console.error(error);
       });
     
-      fetch('http://172.16.0.16:3000/filmkep', {
+      fetch('http://'+ipcim+'/filmkep', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -61,7 +61,7 @@ export default class Filmsajat extends Component {
       LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
       LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop']);
 
-      fetch('http://172.16.0.16:3000/filmatlagertek', {
+      fetch('http://'+ipcim+'/filmatlagertek', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -89,7 +89,7 @@ export default class Filmsajat extends Component {
       bevitel3:this.props.route.params.filmid
 
     }
-    fetch('http://172.16.0.16:3000/filmkommentfelvitel', {
+    fetch('http://'+ipcim+'/filmkommentfelvitel', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -108,7 +108,7 @@ export default class Filmsajat extends Component {
       let bemenet1 = {
         bevitel3:this.props.route.params.filmid
       }
-      fetch('http://172.16.0.16:3000/filmkommentek', {
+      fetch('http://'+ipcim+'/filmkommentek', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -139,7 +139,7 @@ export default class Filmsajat extends Component {
       bevitel3:this.props.route.params.filmid
     }
     
-    fetch('http://172.16.0.16:3000/filmertekeles', {
+    fetch('http://'+ipcim+'/filmertekeles', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -152,7 +152,7 @@ export default class Filmsajat extends Component {
         console.error(error);
       });
 
-      fetch('http://172.16.0.16:3000/filmatlagertek', {
+      fetch('http://'+ipcim+'/filmatlagertek', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -208,7 +208,7 @@ export default class Filmsajat extends Component {
           keyExtractor={({film_id}) => film_id} 
           renderItem={({item}) =>
           <Image 
-          source={{uri:'http://172.16.0.16:3000/'+item.film_kep}}
+          source={{uri:'http://'+ipcim+'/'+item.film_kep}}
           style={{width:200,height:300,borderRadius:5}}
           />
           }
@@ -270,24 +270,37 @@ export default class Filmsajat extends Component {
           placeholder='Hozzászólás irása'
         />
 
+        {this.state.nev == "" || this.state.komment == "" ?
+         <TouchableOpacity 
+         style={{borderWidth:1,width:100,alignSelf:"center",borderColor:"transparent",borderRadius:6,padding:2,backgroundColor:"grey",marginBottom:10}}
+         >
+           
+           <Text style={{textAlign:"center",fontSize:19,color:"white"}}>Mehet</Text>
+         </TouchableOpacity>
+        :
         <TouchableOpacity 
         style={{borderWidth:1,width:100,alignSelf:"center",borderColor:"transparent",borderRadius:6,padding:2,backgroundColor:"grey",marginBottom:10}}
         onPress={async()=> this.felvitel()}
         >
-          <Text style={{textAlign:"center",fontSize:18,color:"white"}}>Mehet</Text>
+          
+          <Text style={{textAlign:"center",fontSize:19,color:"white"}}>Mehet</Text>
         </TouchableOpacity>
-        
+        }
+          {this.state.dataSource.length == 0 ?<Text style={{textAlign:"center",fontSize:19,color:"white"}}> Ehhez a filmhez nincsenek még kommentek </Text> 
+          :
           <FlatList
-            data={this.state.dataSource}
-            keyExtractor={({film_komment_id}) => film_komment_id} 
-            renderItem={({item}) =>
-            <View style={{borderWidth:1,width:150,borderColor:"transparent",borderRadius:10,padding:8,backgroundColor:"lightgrey",margin:7,marginLeft:15}}>
-            <Text style={{color:"black",fontWeight:"bold",fontSize:17}}>{item.film_komment_nev}</Text>
-            <Text>{item.film_komment_szoveg}</Text>
-              
-            </View>
-          }
-          />
+          data={this.state.dataSource}
+          keyExtractor={({film_komment_id}) => film_komment_id} 
+          renderItem={({item}) =>
+          <View style={{borderWidth:1,width:150,borderColor:"transparent",borderRadius:10,padding:8,backgroundColor:"lightgrey",margin:7,marginLeft:15}}>
+          <Text style={{color:"black",fontWeight:"bold",fontSize:15}}>{item.film_komment_nev}</Text>
+          <Text style={{fontSize:17}}>{item.film_komment_szoveg}</Text>
+            
+          </View>
+        }
+        />
+          
+        }
           </View>
         </ScrollView>
       </SafeAreaView>

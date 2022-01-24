@@ -3,7 +3,7 @@ import { FlatList, ActivityIndicator, Text, View,Image,Button,TouchableOpacity,M
 import { MaterialIcons } from "@expo/vector-icons";
 import {Picker} from '@react-native-picker/picker';
 
-
+const ipcim = '172.16.0.16:3000'
 export default class Sorozat extends React.Component {
 
   constructor(props){
@@ -19,7 +19,7 @@ export default class Sorozat extends React.Component {
 
   
   componentDidMount(){
-     fetch('http://172.16.0.16:3000/sorozat')
+     fetch('http://'+ipcim+'/sorozat')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -40,7 +40,7 @@ export default class Sorozat extends React.Component {
         console.error(error);
       });
 
-      fetch('http://172.16.0.16:3000/mufaj')
+      fetch('http://'+ipcim+'/mufaj')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -69,7 +69,7 @@ export default class Sorozat extends React.Component {
 
 
     }
-    fetch('http://172.16.0.16:3000/kereses', {
+    fetch('http://'+ipcim+'/kereses', {
      method: "POST",
      body: JSON.stringify(bemenet),
      headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -99,7 +99,7 @@ export default class Sorozat extends React.Component {
     let bemenet={
       bevitel2:szam
     }
-    return fetch('http://172.16.0.16:3000/sorozatszures', {
+    return fetch('http://'+ipcim+'/sorozatszures', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -123,7 +123,7 @@ export default class Sorozat extends React.Component {
 
   osszes= async() =>
   {
-    fetch('http://172.16.0.16:3000/sorozat')
+    fetch('http://'+ipcim+'/sorozat')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -148,7 +148,7 @@ export default class Sorozat extends React.Component {
     let bemenet={
       bevitel1:itemValue
     }
-    return fetch('http://172.16.0.16:3000/evszures', {
+    return fetch('http://'+ipcim+'/evszures', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -256,7 +256,7 @@ export default class Sorozat extends React.Component {
             sorozatmufaj:item.mufaj_nev
             })}>
             <Image 
-            source={{uri:'http://172.16.0.16:3000/'+item.sorozat_kep}}
+            source={{uri:'http://'+ipcim+'/'+item.sorozat_kep}}
             style={{width:150,height:230,marginRight:10,marginTop:10,marginLeft:10,borderRadius:15}}
             />
             <Text style={{color:"white",marginLeft:15,marginTop:5,fontSize:16,fontWeight:"bold",width:155}}>{item.sorozat_cim}</Text>

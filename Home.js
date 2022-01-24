@@ -7,6 +7,7 @@ import { FlatList, ActivityIndicator, Text, View,Image, TouchableOpacity,Dimensi
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
 
+const ipcim = "172.16.0.16:3000"
 
  
 
@@ -24,7 +25,7 @@ export default class Kezdooldal extends React.Component {
     
     setInterval(()=>{
       
-      fetch('http://192.168.1.128:3000/legjobbfilmek')
+      fetch('http://'+ipcim+'/legjobbfilmek')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -40,7 +41,7 @@ export default class Kezdooldal extends React.Component {
         console.error(error);
       });
 
-      fetch('http://192.168.1.128:3000/legjobbsorozatok')
+      fetch('http://'+ipcim+'/legjobbsorozatok')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -60,10 +61,11 @@ export default class Kezdooldal extends React.Component {
     }
     ,2000)
   }
+  
 
   componentDidMount(){
 
-  fetch('http://192.168.1.128:3000/legjobbfilmek')
+  fetch('http://'+ipcim+'/legjobbfilmek')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -79,7 +81,7 @@ export default class Kezdooldal extends React.Component {
         console.error(error);
       });
 
-      fetch('http://192.168.1.128:3000/legjobbsorozatok')
+      fetch('http://'+ipcim+'/legjobbsorozatok')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -95,7 +97,7 @@ export default class Kezdooldal extends React.Component {
         console.error(error);
       });
 
-      fetch('http://192.168.1.128:3000/legujabbsorozat')
+      fetch('http://'+ipcim+'/legujabbsorozat')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -138,34 +140,7 @@ export default class Kezdooldal extends React.Component {
 
     return(
       <ScrollView style={{flex:1,backgroundColor:"#262626"}}>
-        <View style={{height:height*0.35,flexDirection:"row"}}>
-          <View style={{flex:1}}>
-          <FlatList 
-            showsHorizontalScrollIndicator={false}
-            data={this.state.dataSource3}
-            horizontal
-            pagingEnabled
-            //numColumns={2}
-            keyExtractor={({sorozat_id}) => sorozat_id}
-            renderItem={({item}) =>
-              <Image 
-              source={{uri:'http://192.168.1.128:3000/'+item.sorozat_kep}}
-              style={{
-                width:width*0.55,
-                height:height*0.5,
-                margin:5,
-                borderRadius:15,
-              }}
-              />
-          }
-          />
-          </View>
-          <View style={{flex:1}}>
-            <Text>asd</Text>
-          </View>
-
-        </View>
-      <View style={{height:height*0.35}}>
+      <View style={{height:height*0.4}}>
         <Text style={{color:'white', fontSize:20, textAlign:'center', fontWeight:'bold',}}>Legjobb sorozatok</Text>
           <FlatList 
             showsHorizontalScrollIndicator={false}
@@ -184,7 +159,7 @@ export default class Kezdooldal extends React.Component {
               sorozatepizod:item.sorozat_epizodszam
               })}>
               <Image 
-              source={{uri:'http://192.168.1.128:3000/'+item.sorozat_kep}}
+              source={{uri:'http://'+ipcim+'/'+item.sorozat_kep}}
               style={{width:120,height:170,margin:5,borderRadius:15}}
               />
               <Text style={{color:"white",fontSize:13,fontWeight:"bold",textAlign:"center", width:135}}>{item.sorozat_cim}</Text>
@@ -213,7 +188,7 @@ export default class Kezdooldal extends React.Component {
             filmleiras:item.film_leiras
             })}>
             <Image 
-            source={{uri:'http://192.168.1.128:3000/'+item.film_kep}}
+            source={{uri:'http://'+ipcim+'/'+item.film_kep}}
             style={{width:120,height:170,margin:5,borderRadius:15}}
             />        
             <Text style={{color:"white",fontSize:13,fontWeight:"bold",textAlign:"center", width:125, alignItems:'center' }}>{item.film_cim}</Text>
