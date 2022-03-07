@@ -1,15 +1,10 @@
 import React from 'react';
-import { FlatList, ActivityIndicator, Text, View,Image, TouchableOpacity,Dimensions,ScrollView  } from 'react-native';
+import { FlatList, ActivityIndicator, Text, View,Image, ImageBackground, TouchableOpacity, Dimensions, ScrollView  } from 'react-native';
 
+var height = Dimensions.get("window").height;
+var width = Dimensions.get("window").width;
+const ipcim="172.16.0.12";
 
-
-
-var height = Dimensions.get('window').height;
-var width = Dimensions.get('window').width;
-
-const ipcim = "172.16.0.12:3000"
-
- 
 
 export default class Kezdooldal extends React.Component {
 
@@ -19,13 +14,13 @@ export default class Kezdooldal extends React.Component {
       isLoading: true,
       dataSource:[],
       dataSource2:[],
-      dataSource3:[],
-      kepek:[]
+      legujabbfilm:[],
+      legujabbsorozat:[],
     }
     
     setInterval(()=>{
       
-      fetch('http://'+ipcim+'/legjobbfilmek')
+      fetch('http://'+ipcim+':3000/legjobbfilmek')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -41,7 +36,7 @@ export default class Kezdooldal extends React.Component {
         console.error(error);
       });
 
-      fetch('http://'+ipcim+'/legjobbsorozatok')
+      fetch('http://'+ipcim+':3000/legjobbsorozatok')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -61,11 +56,13 @@ export default class Kezdooldal extends React.Component {
     }
     ,2000)
   }
-  
 
   componentDidMount(){
 
-  fetch('http://'+ipcim+'/legjobbfilmek')
+ 
+    
+
+  fetch('http://'+ipcim+':3000/legjobbfilmek')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -81,7 +78,7 @@ export default class Kezdooldal extends React.Component {
         console.error(error);
       });
 
-      fetch('http://'+ipcim+'/legjobbsorozatok')
+      fetch('http://'+ipcim+':3000/legjobbsorozatok')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -96,15 +93,13 @@ export default class Kezdooldal extends React.Component {
       .catch((error) =>{
         console.error(error);
       });
-
-      fetch('http://'+ipcim+'/legujabbsorozat')
+      fetch('http://'+ipcim+':3000/legfrissebbsorozatok')
       .then((response) => response.json())
       .then((responseJson) => {
 
         this.setState({
           isLoading: false,
-          dataSource3: responseJson,
-          kepek: responseJson
+          legujabbsorozat: responseJson,
         }, function(){
 
         });
@@ -114,12 +109,23 @@ export default class Kezdooldal extends React.Component {
         console.error(error);
       });
 
+      fetch('http://'+ipcim+':3000/legfrissebbfilmek')
+      .then((response) => response.json())
+      .then((responseJson) => {
 
+        this.setState({
+          isLoading: false,
+          legujabbfilm: responseJson,
+        }, function(){
 
+        });
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
   }
 
-  
-  
   
 
 
@@ -133,66 +139,72 @@ export default class Kezdooldal extends React.Component {
       )
     }
 
-
-    
-    
-
-
     return(
-      <ScrollView style={{flex:1,backgroundColor:"#262626"}}>
-      <View style={{height:height*0.4}}>
-        <Text style={{color:'white', fontSize:20, textAlign:'center', fontWeight:'bold',}}>Legjobb sorozatok</Text>
-          <FlatList 
-            showsHorizontalScrollIndicator={false}
-            data={this.state.dataSource2}
-            horizontal
-            //numColumns={2}
-            keyExtractor={({sorozat_id}, index) => sorozat_id}
-            renderItem={({item}) =>
-              <TouchableOpacity onPress={async()=>this.props.navigation.navigate('Sorozatsajat',{
-                sorozatnev:item.sorozat_cim,
-                sorozathossz:item.sorozat_hossz,
-                sorozatid:item.sorozat_id,
-                sorozatleiras:item.sorozat_leiras,
-                sorozatev:item.sorozat_ev,
-                sorozatido:item.sorozat_hossz,
-                sorozatevad:item.sorozat_evadszam,
-                sorozatepizod:item.sorozat_epizodszam,
-                sorozatmufaj:item.mufaj_nev
-              })}>
-              <Image 
-              source={{uri:'http://'+ipcim+'/'+item.sorozat_kep}}
-              style={{width:120,height:170,margin:5,borderRadius:15}}
-              />
-              <Text style={{color:"white",fontSize:13,fontWeight:"bold",textAlign:"center", width:135}}>{item.sorozat_cim}</Text>
-              </TouchableOpacity>
+      
+      <ScrollView style={{flex:1, paddingTop:20,backgroundColor:"#262626",flexDirection:'column'}}>
 
-    
-          }
-          />
-          </View>
 
-        <View style={{height:height*0.35}}>
-      <Text style={{color:'white', fontSize:20, textAlign:'center', fontWeight:'bold',paddingBottom:5,}}>Legjobb filmek</Text>
+          <View style={{height:height*0.30}}>
 
-        <FlatList 
+      <Text style={{paddingBottom:5, marginLeft:10}}> 
+      <Text style={{color:'white', fontSize:17, textAlign:'left', marginLeft:10, fontWeight:'bold'}}>Legújabb</Text>
+      <Text style={{color:'white', fontSize:17, textAlign: 'left'}}> Sorozatok</Text>
+      </Text>        
+
+      <FlatList 
+          style={{height:60,}}
           showsHorizontalScrollIndicator={false}
-          data={this.state.dataSource}
+          data={this.state.legujabbsorozat}
           horizontal
-          keyExtractor={({film_id}) => film_id}
+          //numColumns={2}
+          keyExtractor={({sorozat_id}, index) => sorozat_id}
           renderItem={({item}) =>
-            <TouchableOpacity onPress={async()=>this.props.navigation.navigate('Filmsajat',
-            {
-              filmnev:item.film_cim,
-              filmhossz:item.film_hossz,
-              filmid:item.film_id,
-              filmleiras:item.film_leiras,
-              filmev:item.film_ev,
-              filmido:item.film_hossz,
-              filmmufaj:item.mufaj_nev
+            <TouchableOpacity 
+            onPress={async()=>this.props.navigation.navigate('Sorozatsajat',{sorozatnev:item.sorozat_cim,
+            sorozathossz:item.sorozat_hossz,
+            sorozatid:item.sorozat_id,
+            sorozatleiras:item.sorozat_leiras,
+            sorozatev:item.sorozat_ev,
+            sorozatido:item.sorozat_hossz,
+            sorozatevad:item.sorozat_evadszam,
+            sorozatepizod:item.sorozat_epizodszam,
+            sorozatmufaj:item.mufaj_nev
             })}>
             <Image 
-            source={{uri:'http://'+ipcim+'/'+item.film_kep}}
+            source={{uri:'http://'+ipcim+':3000/'+item.sorozat_kep}}
+            style={{width:120,height:170,margin:5,borderRadius:15}}
+            />
+            <Text style={{color:"white",fontSize:13,fontWeight:"bold",textAlign:"center", width:135, }}>{item.sorozat_cim}</Text>
+            </TouchableOpacity>
+
+
+        }
+        />
+        </View>
+        <View style={{height:height*0.33}}>
+        <Text style={{paddingBottom:5, marginLeft:10}}> 
+      <Text style={{color:'white', fontSize:17, textAlign:'left', marginLeft:10, fontWeight:'bold',paddingBottom:5,}}>Legújabb</Text>
+      <Text style={{color:'white', fontSize:17, textAlign: 'left', paddingBottom:5}}> Filmek </Text>
+      </Text>
+        <FlatList 
+          style={{height:60}}
+          showsHorizontalScrollIndicator={false}
+          data={this.state.legujabbfilm}
+          horizontal
+          keyExtractor={({film_id}, index) => film_id}
+          renderItem={({item}) =>
+            <TouchableOpacity 
+            onPress={async()=>this.props.navigation.navigate('Filmsajat',
+            {
+            filmid:item.film_id,
+            filmnev:item.film_cim,
+            filmev:item.film_ev,
+            filmhossz:item.film_hossz,
+            filmleiras:item.film_leiras,
+            filmmufaj:item.mufaj_nev
+            })}>
+            <Image 
+            source={{uri:'http://'+ipcim+':3000/'+item.film_kep}}
             style={{width:120,height:170,margin:5,borderRadius:15}}
             />        
             <Text style={{color:"white",fontSize:13,fontWeight:"bold",textAlign:"center", width:125, alignItems:'center' }}>{item.film_cim}</Text>
@@ -201,6 +213,80 @@ export default class Kezdooldal extends React.Component {
         }
         />
         </View>
+
+
+      <View style={{height:height*0.30,}}>
+
+      <Text style={{paddingBottom:5, marginLeft:10}}> 
+      <Text style={{color:'white', fontSize:17, textAlign:'left', marginLeft:10, fontWeight:'bold'}}>Legnagyobb értékelésű</Text>
+      <Text style={{color:'white', fontSize:17, textAlign: 'left'}}> Sorozatok</Text>
+      </Text>        
+
+      <FlatList 
+          style={{height:60,}}
+          showsHorizontalScrollIndicator={false}
+          data={this.state.dataSource2}
+          horizontal
+          //numColumns={2}
+          keyExtractor={({sorozat_id}, index) => sorozat_id}
+          renderItem={({item}) =>
+            <TouchableOpacity 
+            onPress={async()=>this.props.navigation.navigate('Sorozatsajat',{sorozatnev:item.sorozat_cim,
+            sorozathossz:item.sorozat_hossz,
+            sorozatid:item.sorozat_id,
+            sorozatleiras:item.sorozat_leiras,
+            sorozatev:item.sorozat_ev,
+            sorozatido:item.sorozat_hossz,
+            sorozatevad:item.sorozat_evadszam,
+            sorozatepizod:item.sorozat_epizodszam,
+            sorozatmufaj:item.mufaj_nev
+            })}>
+            <Image 
+            source={{uri:'http://'+ipcim+':3000/'+item.sorozat_kep}}
+            style={{width:120,height:170,margin:5,borderRadius:15}}
+            />
+            <Text style={{color:"white",fontSize:13,fontWeight:"bold",textAlign:"center", width:135, }}>{item.sorozat_cim}</Text>
+            </TouchableOpacity>
+
+  
+        }
+        />
+        </View>
+
+        <View style={{height:height*0.30}}>
+        <Text style={{paddingBottom:5, marginLeft:10}}> 
+      <Text style={{color:'white', fontSize:17, textAlign:'left', marginLeft:10, fontWeight:'bold',paddingBottom:5,}}>Legnagyobb értékelésű</Text>
+      <Text style={{color:'white', fontSize:17, textAlign: 'left', paddingBottom:5}}> Filmek </Text>
+      </Text>
+        <FlatList 
+          style={{height:60}}
+          showsHorizontalScrollIndicator={false}
+          data={this.state.dataSource}
+          horizontal
+          keyExtractor={({film_id}, index) => film_id}
+          renderItem={({item}) =>
+            <TouchableOpacity 
+            onPress={async()=>this.props.navigation.navigate('Filmsajat',
+            {
+            filmid:item.film_id,
+            filmnev:item.film_cim,
+            filmev:item.film_ev,
+            filmhossz:item.film_hossz,
+            filmleiras:item.film_leiras,
+            filmmufaj:item.mufaj_nev
+            })}>
+            <Image 
+            source={{uri:'http://'+ipcim+':3000/'+item.film_kep}}
+            style={{width:120,height:170,margin:5,borderRadius:15}}
+            />        
+            <Text style={{color:"white",fontSize:13,fontWeight:"bold",textAlign:"center", width:125, alignItems:'center' }}>{item.film_cim}</Text>
+            </TouchableOpacity>
+  
+        }
+        />
+        </View>
+
+        
       </ScrollView>
     );
   }
