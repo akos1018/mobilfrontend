@@ -7,7 +7,7 @@ import { FlatList, ActivityIndicator, Text, View,Image, TouchableOpacity,Dimensi
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
 
-const ipcim = "172.16.0.16:3000"
+const ipcim = "172.16.0.12:3000"
 
  
 
@@ -149,14 +149,16 @@ export default class Kezdooldal extends React.Component {
             //numColumns={2}
             keyExtractor={({sorozat_id}, index) => sorozat_id}
             renderItem={({item}) =>
-              <TouchableOpacity onPress={async()=>this.props.navigation.navigate('Sorozatsajat',{sorozatnev:item.sorozat_cim,
-              sorozathossz:item.sorozat_hossz,
-              sorozatid:item.sorozat_id,
-              sorozatleiras:item.sorozat_leiras,
-              sorozatev:item.sorozat_ev,
-              sorozatido:item.sorozat_hossz,
-              sorozatevad:item.sorozat_evadszam,
-              sorozatepizod:item.sorozat_epizodszam
+              <TouchableOpacity onPress={async()=>this.props.navigation.navigate('Sorozatsajat',{
+                sorozatnev:item.sorozat_cim,
+                sorozathossz:item.sorozat_hossz,
+                sorozatid:item.sorozat_id,
+                sorozatleiras:item.sorozat_leiras,
+                sorozatev:item.sorozat_ev,
+                sorozatido:item.sorozat_hossz,
+                sorozatevad:item.sorozat_evadszam,
+                sorozatepizod:item.sorozat_epizodszam,
+                sorozatmufaj:item.mufaj_nev
               })}>
               <Image 
               source={{uri:'http://'+ipcim+'/'+item.sorozat_kep}}
@@ -177,15 +179,17 @@ export default class Kezdooldal extends React.Component {
           showsHorizontalScrollIndicator={false}
           data={this.state.dataSource}
           horizontal
-          keyExtractor={({film_id}, index) => film_id}
+          keyExtractor={({film_id}) => film_id}
           renderItem={({item}) =>
             <TouchableOpacity onPress={async()=>this.props.navigation.navigate('Filmsajat',
             {
-            filmid:item.film_id,
-            filmnev:item.film_cim,
-            filmev:item.film_ev,
-            filmhossz:item.film_hossz,
-            filmleiras:item.film_leiras
+              filmnev:item.film_cim,
+              filmhossz:item.film_hossz,
+              filmid:item.film_id,
+              filmleiras:item.film_leiras,
+              filmev:item.film_ev,
+              filmido:item.film_hossz,
+              filmmufaj:item.mufaj_nev
             })}>
             <Image 
             source={{uri:'http://'+ipcim+'/'+item.film_kep}}

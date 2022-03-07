@@ -3,14 +3,15 @@ import { Text, TextInput, View, FlatList,Image,TouchableOpacity,SafeAreaView,Scr
 import StarRating from 'react-native-star-rating';
 import { Ionicons } from '@expo/vector-icons';
 
-const ipcim = '172.16.0.16:3000'
+const ipcim = '172.16.0.12:3000'
 
 export default class Filmsajat extends Component {
   constructor(props) {
     super(props);
     this.state = {
       komment:'',
-      nev:''
+      nev:'',
+      dataSource:[]
 
     };
   }
@@ -96,6 +97,25 @@ export default class Filmsajat extends Component {
       } )
       .then((response) => response.text())
       .then(() => {
+        fetch('http://'+ipcim+'/filmkommentek', {
+          method: "POST",
+          body: JSON.stringify(bemenet1),
+          headers: {"Content-type": "application/json; charset=UTF-8"}
+          } )
+          .then((response) => response.json())
+          .then((responseJson) => {
+    
+            this.setState({
+              isLoading: false,
+              dataSource: responseJson,
+            }, function(){
+    
+            });
+          })
+          .catch((error) =>{
+            console.error(error);
+          });
+        
 
       })
       .catch((error) =>{
@@ -108,24 +128,7 @@ export default class Filmsajat extends Component {
       let bemenet1 = {
         bevitel3:this.props.route.params.filmid
       }
-      fetch('http://'+ipcim+'/filmkommentek', {
-      method: "POST",
-      body: JSON.stringify(bemenet1),
-      headers: {"Content-type": "application/json; charset=UTF-8"}
-      } )
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson,
-        }, function(){
-
-        });
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
+     
   }
 
   onStarRatingPress = async(ertek) => {
@@ -146,30 +149,31 @@ export default class Filmsajat extends Component {
       } )
       .then((response) => response.text())
       .then(() => {
+        fetch('http://'+ipcim+'/filmatlagertek', {
+          method: "POST",
+          body: JSON.stringify(bemenet1),
+          headers: {"Content-type": "application/json; charset=UTF-8"}
+          } )
+          .then((response) => response.json())
+          .then((responseJson) => {
+    
+            this.setState({
+              isLoading: false,
+              dataSource3: responseJson,
+            }, function(){
+    
+            });
+          })
+          .catch((error) =>{
+            console.error(error);
+          });
 
       })
       .catch((error) =>{
         console.error(error);
       });
 
-      fetch('http://'+ipcim+'/filmatlagertek', {
-      method: "POST",
-      body: JSON.stringify(bemenet1),
-      headers: {"Content-type": "application/json; charset=UTF-8"}
-      } )
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          dataSource3: responseJson,
-        }, function(){
-
-        });
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
+     
   }
   
 
@@ -263,7 +267,7 @@ export default class Filmsajat extends Component {
         />
 
         <TextInput
-          style={{borderWidth:1,padding:5,marginBottom:10,color:"white",backgroundColor:"lightgrey",borderRadius:15,borderColor:"transparent",color:"black",width:300,marginLeft:30}}
+          style={{borderWidth:1,padding:5,marginBottom:10,color:"white",backgroundColor:"lightgrey",borderRadius:15,borderColor:"transparent",color:"black",width:300,height:50,marginLeft:30}}
           onChangeText={(komment) => this.setState({komment})}
           value={this.state.komment}
           multiline={true}
@@ -272,10 +276,10 @@ export default class Filmsajat extends Component {
 
         {this.state.nev == "" || this.state.komment == "" ?
          <TouchableOpacity 
-         style={{borderWidth:1,width:100,alignSelf:"center",borderColor:"transparent",borderRadius:6,padding:2,backgroundColor:"grey",marginBottom:10}}
+         style={{borderWidth:1,width:150,alignSelf:"center",borderColor:"transparent",borderRadius:6,padding:2,backgroundColor:"grey",marginBottom:10}}
          >
            
-           <Text style={{textAlign:"center",fontSize:19,color:"white"}}>Mehet</Text>
+           <Text style={{textAlign:"center",fontSize:19,color:"white"}}>Az egyik mezőt üresen hagytad</Text>
          </TouchableOpacity>
         :
         <TouchableOpacity 

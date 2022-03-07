@@ -3,7 +3,7 @@ import { Text, TextInput, View, FlatList,Image,TouchableOpacity,SafeAreaView,Scr
 import StarRating from 'react-native-star-rating'
 import { Ionicons } from '@expo/vector-icons';
 
-const ipcim = '172.16.0.16:3000'
+const ipcim = '172.16.0.12:3000'
 
 export default class Sorozatsajat extends Component {
   constructor(props) {
@@ -102,18 +102,7 @@ export default class Sorozatsajat extends Component {
       .then((response) => response.text())
       .then(() => {
 
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
-
-      this.setState({komment:""})
-      this.setState({nev:""})
-
-      let bemenet1 = {
-        bevitel3:this.props.route.params.sorozatid
-      }
-      fetch('http://'+ipcim+'/kommentek', {
+        fetch('http://'+ipcim+'/kommentek', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -131,6 +120,19 @@ export default class Sorozatsajat extends Component {
       .catch((error) =>{
         console.error(error);
       });
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+
+      this.setState({komment:""})
+      this.setState({nev:""})
+
+      let bemenet1 = {
+        bevitel3:this.props.route.params.sorozatid
+      }
+      
   }
 
   onStarRatingPress = async(ertek) => {
@@ -148,15 +150,7 @@ export default class Sorozatsajat extends Component {
       .then((response) => response.text())
       .then(() => {
 
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
-
-      let bemenet1 = {
-        bevitel3:this.props.route.params.sorozatid
-      }
-      fetch('http://'+ipcim+'/atlagertek', {
+        fetch('http://'+ipcim+'/atlagertek', {
       method: "POST",
       body: JSON.stringify(bemenet1),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -174,6 +168,16 @@ export default class Sorozatsajat extends Component {
       .catch((error) =>{
         console.error(error);
       });
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+
+      let bemenet1 = {
+        bevitel3:this.props.route.params.sorozatid
+      }
+     
   }
   
 
@@ -285,7 +289,7 @@ export default class Sorozatsajat extends Component {
         
         {this.state.nev == "" || this.state.komment == "" ?
          <TouchableOpacity 
-         style={{borderWidth:1,width:100,alignSelf:"center",borderColor:"transparent",borderRadius:6,padding:2,backgroundColor:"grey",marginBottom:10}}
+         style={{borderWidth:1,width:150,alignSelf:"center",borderColor:"transparent",borderRadius:6,padding:2,backgroundColor:"grey",marginBottom:10,}}
          >
            
            <Text style={{textAlign:"center",fontSize:19,color:"white"}}>Az egyik mezőt üresen hagytad</Text>

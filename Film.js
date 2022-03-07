@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, ActivityIndicator, Text, View,Image,Button,TouchableOpacity,Modal,Pressable,StyleSheet,TextInput  } from 'react-native';
 import { MaterialIcons } from "@expo/vector-icons";
 
-const ipcim = '172.16.0.16:3000'
+const ipcim = '172.16.0.12:3000'
 export default class Sorozat extends React.Component {
 
   constructor(props){
@@ -206,7 +206,8 @@ export default class Sorozat extends React.Component {
           keyExtractor={({film_id}) => film_id} 
           renderItem={({item}) =>
           <View>
-            <TouchableOpacity onPress={async()=>this.props.navigation.navigate('Filmsajat',{filmnev:item.film_cim,
+            <TouchableOpacity onPress={async()=>this.props.navigation.navigate('Filmsajat',{
+            filmnev:item.film_cim,
             filmhossz:item.film_hossz,
             filmid:item.film_id,
             filmleiras:item.film_leiras,

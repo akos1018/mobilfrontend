@@ -3,7 +3,7 @@ import { FlatList, ActivityIndicator, Text, View,Image,Button,TouchableOpacity,M
 import { MaterialIcons } from "@expo/vector-icons";
 import {Picker} from '@react-native-picker/picker';
 
-const ipcim = '172.16.0.16:3000'
+const ipcim = '172.16.0.12:3000'
 export default class Sorozat extends React.Component {
 
   constructor(props){

@@ -10,7 +10,7 @@ export default class Header extends React.Component{
 
     render(){
         return(
-            <View style={{justifyContent:"center",alignItems:"center",flexDirection:"row",width:"130%"}}>
+            <View style={{justifyContent:"center",alignItems:"center",flexDirection:"row"}}>
                 <View>
                     <Text style={{fontWeight:"bold",color:"white",letterSpacing:1,fontSize:25}}>Film</Text>
                 </View>
