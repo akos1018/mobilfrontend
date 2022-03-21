@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View,StyleSheet,TouchableOpacity, Touchable } from 'react-native';
+import { Text, TextInput, View,StyleSheet,TouchableOpacity,  } from 'react-native';
 
-const ipcim = '172.16.0.12:3000'
+
+
+//const ipcim = '172.16.0.12:3000'
+const IP = require('/.ipcim.js')
+
 export default class Bevitel extends Component {
   constructor(props) {
     super(props);
@@ -16,13 +20,13 @@ export default class Bevitel extends Component {
       bevitel1:this.state.szoveg,
 
     }
-    fetch('http://'+ipcim+'/ajanlas', {
+    fetch('http://'+IP.ipcim+'/ajanlas', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
       } )
       .then((response) => response.text())
-      .then((text) => {
+      .then(() => {
 
       })
       .catch((error) =>{

@@ -1,9 +1,10 @@
 import React from 'react';
 import { FlatList, ActivityIndicator, Text, View,Image,Button,TouchableOpacity,Modal,Pressable,StyleSheet,TextInput  } from 'react-native';
 import { MaterialIcons } from "@expo/vector-icons";
-import {Picker} from '@react-native-picker/picker';
 
-const ipcim = '172.16.0.12:3000'
+//const ipcim = '172.16.0.12:3000'
+const IP = require('/.ipcim.js')
+
 export default class Sorozat extends React.Component {
 
   constructor(props){
@@ -11,15 +12,13 @@ export default class Sorozat extends React.Component {
     this.state ={ 
       isLoading: true,
       cim:'',
-      aktmufaj:1,
-      pickervalue:"",
-      
+      aktmufaj:1,      
     }
   }
 
   
   componentDidMount(){
-     fetch('http://'+ipcim+'/sorozat')
+     fetch('http://'+IP.ipcim+'/sorozat')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -40,7 +39,7 @@ export default class Sorozat extends React.Component {
         console.error(error);
       });
 
-      fetch('http://'+ipcim+'/mufaj')
+      fetch('http://'+IP.ipcim+'/mufaj')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -69,7 +68,7 @@ export default class Sorozat extends React.Component {
 
 
     }
-    fetch('http://'+ipcim+'/kereses', {
+    fetch('http://'+IP.ipcim+'/kereses', {
      method: "POST",
      body: JSON.stringify(bemenet),
      headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -99,7 +98,7 @@ export default class Sorozat extends React.Component {
     let bemenet={
       bevitel2:szam
     }
-    return fetch('http://'+ipcim+'/sorozatszures', {
+    return fetch('http://'+IP.ipcim+'/sorozatszures', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -123,7 +122,7 @@ export default class Sorozat extends React.Component {
 
   osszes= async() =>
   {
-    fetch('http://'+ipcim+'/sorozat')
+    fetch('http://'+IP.ipcim+'/sorozat')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -142,34 +141,7 @@ export default class Sorozat extends React.Component {
 
   }
 
-  evszures = (itemValue) =>{
-    this.setState({pickervalue:itemValue})
-
-    let bemenet={
-      bevitel1:itemValue
-    }
-    return fetch('http://'+ipcim+'/evszures', {
-      method: "POST",
-      body: JSON.stringify(bemenet),
-      headers: {"Content-type": "application/json; charset=UTF-8"}
-      } )
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson,
-        }, function(){
-
-        });
-
-        
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
-  }
-
+ 
  
 
 
@@ -256,7 +228,7 @@ export default class Sorozat extends React.Component {
             sorozatmufaj:item.mufaj_nev
             })}>
             <Image 
-            source={{uri:'http://'+ipcim+'/'+item.sorozat_kep}}
+            source={{uri:'http://'+IP.ipcim+'/'+item.sorozat_kep}}
             style={{width:150,height:230,marginRight:10,marginTop:10,marginLeft:10,borderRadius:15}}
             />
             <Text style={{color:"white",marginLeft:15,marginTop:5,fontSize:16,fontWeight:"bold",width:155}}>{item.sorozat_cim}</Text>

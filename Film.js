@@ -2,7 +2,9 @@ import React from 'react';
 import { FlatList, ActivityIndicator, Text, View,Image,Button,TouchableOpacity,Modal,Pressable,StyleSheet,TextInput  } from 'react-native';
 import { MaterialIcons } from "@expo/vector-icons";
 
-const ipcim = '172.16.0.12:3000'
+//const ipcim = '172.16.0.12:3000'
+const IP = require('/.ipcim.js')
+
 export default class Sorozat extends React.Component {
 
   constructor(props){
@@ -17,7 +19,7 @@ export default class Sorozat extends React.Component {
 
   
   componentDidMount(){
-     fetch('http://'+ipcim+'/film')
+     fetch('http://'+IP.ipcim+'/film')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -34,7 +36,7 @@ export default class Sorozat extends React.Component {
         console.error(error);
       });
 
-      fetch('http://'+ipcim+'/filmmufaj')
+      fetch('http://'+IP.ipcim+'/filmmufaj')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -62,7 +64,7 @@ export default class Sorozat extends React.Component {
 
 
     }
-    fetch('http://'+ipcim+'/filmkereses', {
+    fetch('http://'+IP.ipcim+'/filmkereses', {
      method: "POST",
      body: JSON.stringify(bemenet),
      headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -92,7 +94,7 @@ export default class Sorozat extends React.Component {
     let bemenet={
       bevitel2:szam
     }
-    return fetch('http://'+ipcim+'/filmszures', {
+    return fetch('http://'+IP.ipcim+'/filmszures', {
       method: "POST",
       body: JSON.stringify(bemenet),
       headers: {"Content-type": "application/json; charset=UTF-8"}
@@ -116,7 +118,7 @@ export default class Sorozat extends React.Component {
 
   osszes= async() =>
   {
-    fetch('http://'+ipcim+'/film')
+    fetch('http://'+IP.ipcim+'/film')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -216,7 +218,7 @@ export default class Sorozat extends React.Component {
             filmmufaj:item.mufaj_nev
             })}>
             <Image 
-            source={{uri:'http://'+ipcim+'/'+item.film_kep}}
+            source={{uri:'http://'+IP.ipcim+'/'+item.film_kep}}
             style={{width:150,height:230,marginRight:10,marginTop:10,marginLeft:10,borderRadius:15}}
             />
             <Text style={{color:"white",marginLeft:15,marginTop:5,fontSize:16,fontWeight:"bold",width:155}}>{item.film_cim}</Text>
