@@ -4,7 +4,7 @@ import { Text, TextInput, View,StyleSheet,TouchableOpacity,  } from 'react-nativ
 
 
 //const ipcim = '172.16.0.12:3000'
-const IP = require('/.ipcim.js')
+const IP = require('./Ipcim.js')
 
 export default class Bevitel extends Component {
   constructor(props) {

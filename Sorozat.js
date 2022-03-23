@@ -3,7 +3,7 @@ import { FlatList, ActivityIndicator, Text, View,Image,Button,TouchableOpacity,M
 import { MaterialIcons } from "@expo/vector-icons";
 
 //const ipcim = '172.16.0.12:3000'
-const IP = require('/.ipcim.js')
+const IP = require('./Ipcim.js')
 
 export default class Sorozat extends React.Component {
 
